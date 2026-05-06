@@ -32,3 +32,7 @@ jobs:
         uses: hacs/action@d556e736723344f83838d08488c983a15381059a # 22.5.0
         with:
           category: integration
+          # The blueprint is a template, not a published integration, so it
+          # has no entry in home-assistant/brands. Forks should remove this
+          # ignore once they register their brand.
+          ignore: brands

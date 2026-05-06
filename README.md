@@ -41,7 +41,8 @@ Based on [ludeeus/integration_blueprint](https://github.com/ludeeus/integration_
    - Run `grep -rn integration_blueprint .` to catch leftover imports (especially in `tests/`)
 3. Replace the sample API in `api.py` with your real client and adjust `coordinator.py`, `config_flow.py`, `sensor.py` to match.
 4. Update `translations/en.json` and `translations/pt-BR.json` (parity is enforced by tests).
-5. Update `README.md` and `CLAUDE.md` for your integration.
+5. Replace the placeholder brand assets in `custom_components/integration_blueprint/brand/` (`icon.png`, `icon@2x.png`, `logo.png`, `logo@2x.png`) with your own — these satisfy the HACS brand check locally until you register the integration in [`home-assistant/brands`](https://github.com/home-assistant/brands).
+6. Update `README.md` and `CLAUDE.md` for your integration.
 
 ## Useful commands
 

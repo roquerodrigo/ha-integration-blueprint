@@ -26,6 +26,16 @@ scripts/lint && pytest
 
 Both gates mirror CI (`.github/workflows/lint.yml`). Skip this only when the change literally cannot affect lint or tests (e.g., README-only edits).
 
+## Bumping the Home Assistant version
+
+The Home Assistant version is pinned in three places and **must be updated together**, otherwise CI, HACS and the test harness drift apart:
+
+1. `requirements.txt` — `homeassistant==<X.Y.Z>` (runtime/CI lint + mypy).
+2. `hacs.json` — `"homeassistant": "<X.Y.Z>"` (minimum HA core enforced by HACS).
+3. `requirements_test.txt` — `pytest-homeassistant-custom-component==<matching release>` (the test harness ships its own pinned `homeassistant`; the two pins must come from the same HA release, otherwise lint and tests resolve different cores).
+
+Verify the pairing on PyPI before committing: the `requires_dist` of `pytest-homeassistant-custom-component` must list the same `homeassistant==<X.Y.Z>` you pinned in `requirements.txt`.
+
 ## Architecture
 
 The integration follows the HA `DataUpdateCoordinator` pattern:

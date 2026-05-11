@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.2](https://github.com/roquerodrigo/ha-integration-blueprint/compare/v0.1.1...v0.1.2) (2026-05-11)
+
+
+### Dependencies
+
+* bump Home Assistant to 2026.5.1 ([2ee9412](https://github.com/roquerodrigo/ha-integration-blueprint/commit/2ee9412994763b3e29611de78f1a0108ba02d258))
+
 ## [0.1.1](https://github.com/roquerodrigo/ha-integration-blueprint/compare/v0.1.0...v0.1.1) (2026-05-09)
 
 

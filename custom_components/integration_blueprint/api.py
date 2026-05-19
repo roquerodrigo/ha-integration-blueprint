@@ -88,6 +88,6 @@ class IntegrationBlueprintApiClient:
             raise IntegrationBlueprintApiClientCommunicationError(msg) from exception
         except IntegrationBlueprintApiClientError:
             raise
-        except Exception as exception:  # pylint: disable=broad-except
+        except Exception as exception:
             msg = f"Something really wrong happened! - {exception}"
             raise IntegrationBlueprintApiClientError(msg) from exception

@@ -29,7 +29,7 @@ async def async_setup_entry(
 class IntegrationBlueprintTitleSensor(IntegrationBlueprintEntity, SensorEntity):
     """Sensor exposing the latest post title returned by the API."""
 
-    _attr_name = "Integration Blueprint"
+    _attr_translation_key = "title"
     _attr_icon = "mdi:format-quote-close"
 
     @property

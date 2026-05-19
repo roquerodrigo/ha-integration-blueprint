@@ -48,6 +48,13 @@
             }
         }
     },
+    "entity": {
+        "sensor": {
+            "title": {
+                "name": "Title"
+            }
+        }
+    },
     "issues": {
         "deprecated_api": {
             "title": "Deprecated API endpoint in use",

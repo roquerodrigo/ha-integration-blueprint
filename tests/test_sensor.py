@@ -3,8 +3,7 @@ from __future__ import annotations
 from unittest.mock import MagicMock
 
 from custom_components.integration_blueprint.sensor import (
-    ENTITY_DESCRIPTIONS,
-    IntegrationBlueprintSensor,
+    IntegrationBlueprintTitleSensor,
 )
 
 SAMPLE_POST = {
@@ -15,13 +14,11 @@ SAMPLE_POST = {
 }
 
 
-def _make_sensor(data=None) -> IntegrationBlueprintSensor:
+def _make_sensor(data=None) -> IntegrationBlueprintTitleSensor:
     coord = MagicMock()
     coord.data = data
     coord.config_entry.entry_id = "eid"
-    return IntegrationBlueprintSensor(
-        coordinator=coord, entity_description=ENTITY_DESCRIPTIONS[0]
-    )
+    return IntegrationBlueprintTitleSensor(coordinator=coord)
 
 
 async def test_sensor_count(hass, setup_integration):
@@ -43,6 +40,6 @@ def test_native_value_returns_none_before_first_refresh():
     assert sensor.native_value is None
 
 
-def test_unique_id_combines_entry_id_and_key():
+def test_unique_id_uses_entry_id_with_title_suffix():
     sensor = _make_sensor()
-    assert sensor.unique_id == "eid_integration_blueprint"
+    assert sensor.unique_id == "eid_title"

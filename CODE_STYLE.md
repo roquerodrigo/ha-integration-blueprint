@@ -6,6 +6,24 @@ and must exit cleanly. `pytest` (with the 95 % coverage gate) follows.
 
 **Always read this file before adding or restructuring code.**
 
+## Quality scale target
+
+This blueprint targets **Platinum** on the [Home Assistant Integration Quality
+Scale](https://developers.home-assistant.io/docs/core/integration-quality-scale/).
+Each tier inherits every rule from the previous one:
+
+- **Bronze** — UI setup via `config_flow`, config-flow tests, user-facing docs.
+- **Silver** — active code owner, automatic recovery from connection errors,
+  reauth flow, no log spam on transient failures.
+- **Gold** — full test coverage, entity translations, reconfigure flow,
+  diagnostics download, optional discovery.
+- **Platinum** — strict typing, fully async code base, efficient data handling
+  (no redundant polling or state-machine writes).
+
+Promotion to a tier requires a `quality_scale.yaml` at the integration root
+listing each rule as `done` / `todo` / `exempt` (with a reason). Add or update
+that file in the same PR that satisfies a new rule.
+
 ## Language
 
 - Code is written in **English**: file names, class names, function names,
@@ -173,11 +191,29 @@ with a one-line comment explaining the deliberate narrowing — see
 ## Coordinator and runtime data
 
 - All API state flows through `entry.runtime_data: IntegrationBlueprintData`
-  (`data.py`). Never store integration state in `hass.data`.
+  (`data.py`). Never store integration state in `hass.data` — `runtime_data` is
+  auto-discarded on unload, the legacy `hass.data[DOMAIN][entry_id]` pattern is
+  not.
 - The coordinator is typed as `DataUpdateCoordinator[IntegrationBlueprintPost]`
   (or whatever your real payload TypedDict is). `_async_update_data` returns
-  the typed payload; client errors map to `UpdateFailed`,
-  authentication errors to `ConfigEntryAuthFailed` (which triggers reauth).
+  the typed payload.
+- Use `await coordinator.async_config_entry_first_refresh()` during
+  `async_setup_entry` (not `async_refresh()`) — a failed first refresh raises
+  `ConfigEntryNotReady` and HA retries with backoff automatically.
+- Pass `always_update=False` to the coordinator when the payload TypedDict
+  compares cleanly with `__eq__`; HA then skips listener callbacks and state
+  writes when the data hasn't changed.
+- Use `self.async_contexts()` inside `_async_update_data` to scope API work to
+  the entities currently subscribed — disabled entities shouldn't drive
+  network calls.
+- Error mapping inside `_async_update_data`:
+  - Communication errors → `raise UpdateFailed("Failed to …: %s" % err)`. Pass
+    `retry_after=<seconds>` when the upstream signals an explicit backoff (e.g.
+    HTTP 429 `Retry-After`).
+  - Authentication errors → `raise ConfigEntryAuthFailed(...)` — HA cancels
+    further updates and starts the `SOURCE_REAUTH` flow.
+  - Never let raw upstream exception strings reach `UpdateFailed` when they
+    could carry tokens; convert to a sanitized message at the API client.
 
 ## Config / options / repairs / diagnostics
 
@@ -200,6 +236,28 @@ with a one-line comment explaining the deliberate narrowing — see
 - Issue strings live under `issues.<issue_id>`; options strings under
   `options.step.init.data`; flow strings under `config.step.<step_id>`;
   entity names under `entity.<platform>.<key>.name`.
+
+## HACS publishing requirements
+
+[HACS](https://www.hacs.xyz/docs/publish/integration/) validates the repository
+shape on every push via `hacs/action@main` (and HA itself runs `hassfest`).
+Both gates must stay green:
+
+- **One integration per repository**, located in `custom_components/<domain>/`.
+- `manifest.json` must declare `domain`, `name`, `version`, `documentation`,
+  `issue_tracker`, `codeowners`. The `version` key is **mandatory for custom
+  integrations** (omit it in core integrations only) and must parse as
+  `AwesomeVersion` — CalVer or SemVer.
+- `hacs.json` at the repo root pins the minimum HA core via the
+  `homeassistant` key. This is the third HA pin (see `CLAUDE.md`).
+- Brand assets — at minimum a 256×256 `icon.png` — live in the
+  [home-assistant/brands](https://github.com/home-assistant/brands) repo under
+  `custom_integrations/<domain>/`, not in this repo.
+- A `README.md` at the repo root is required; HACS surfaces it as the
+  integration description.
+
+Release-please tags releases on every merge to `main`; HACS surfaces the five
+most recent GitHub releases to users, so keep the changelog grep-able.
 
 ## Pre-commit hooks
 

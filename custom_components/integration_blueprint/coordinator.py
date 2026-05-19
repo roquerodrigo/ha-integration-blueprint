@@ -35,6 +35,7 @@ class IntegrationBlueprintDataUpdateCoordinator(
             logger=LOGGER,
             name=DOMAIN,
             update_interval=scan_interval,
+            always_update=False,
         )
 
     async def _async_update_data(self) -> IntegrationBlueprintPost:

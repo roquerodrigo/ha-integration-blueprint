@@ -1,9 +1,6 @@
 # Home Assistant Integration Blueprint
 
-[![HACS Validate](https://github.com/roquerodrigo/ha-integration-blueprint/actions/workflows/validate.yml/badge.svg)](https://github.com/roquerodrigo/ha-integration-blueprint/actions/workflows/validate.yml)
-[![Lint](https://github.com/roquerodrigo/ha-integration-blueprint/actions/workflows/lint.yml/badge.svg)](https://github.com/roquerodrigo/ha-integration-blueprint/actions/workflows/lint.yml)
-[![CodeQL](https://github.com/roquerodrigo/ha-integration-blueprint/actions/workflows/codeql.yml/badge.svg)](https://github.com/roquerodrigo/ha-integration-blueprint/actions/workflows/codeql.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![CI](https://github.com/roquerodrigo/ha-integration-blueprint/actions/workflows/ci.yml/badge.svg)](https://github.com/roquerodrigo/ha-integration-blueprint/actions/workflows/ci.yml)
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://github.com/hacs/integration)
 
 Template for creating custom [Home Assistant](https://www.home-assistant.io/) integrations distributable via [HACS](https://hacs.xyz/).

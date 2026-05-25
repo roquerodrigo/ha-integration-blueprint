@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.4](https://github.com/roquerodrigo/ha-integration-blueprint/compare/v0.1.3...v0.1.4) (2026-05-25)
+
+
+### Documentation
+
+* fix CI badge and drop license badge ([fd89f13](https://github.com/roquerodrigo/ha-integration-blueprint/commit/fd89f13f8205f9786a8a0fa10b7c54be71717929))
+* fix CI badge and drop license badge ([0ba71ff](https://github.com/roquerodrigo/ha-integration-blueprint/commit/0ba71fff8e9da4b48d907a16d8ef580004ce6e75))
+
 ## [0.1.3](https://github.com/roquerodrigo/ha-integration-blueprint/compare/v0.1.2...v0.1.3) (2026-05-19)
 
 

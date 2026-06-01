@@ -15,26 +15,28 @@ This file deliberately avoids restating those rules — it only adds:
 
 ## Verification workflow
 
-**After every code change, always run lint then tests, in that order, before declaring the task done:**
+**After every code change, always run lint then tests, in that order, before declaring the task done. Run the tools directly (no `scripts/lint` wrapper):**
 
 ```bash
-scripts/lint && pytest
+uv run ruff format --check .
+uv run ruff check .
+uv run mypy custom_components/integration_blueprint
+uv run pytest
 ```
 
-- `scripts/lint` runs `ruff format`, `ruff check --fix` and `mypy` (`mypy.ini`). Fix any failure and re-run before moving on.
-- `pytest` enforces a **95 % coverage gate** (`pytest.ini`).
+- Lint runs `ruff format`, `ruff check` and `mypy` — all configured in `pyproject.toml`. Fix any failure and re-run before moving on.
+- `pytest` enforces a **95 % coverage gate** (`--cov-fail-under` in `pyproject.toml`).
 
-Both gates mirror CI (`.github/workflows/lint.yml`). Skip this only when the change literally cannot affect lint or tests (e.g., README-only edits).
+Both gates mirror CI (`.github/workflows/ci.yml`). Skip this only when the change literally cannot affect lint or tests (e.g., README-only edits).
 
 ## Bumping the Home Assistant version
 
-The Home Assistant version is pinned in three places and **must be updated together**, otherwise CI, HACS and the test harness drift apart:
+The Home Assistant version is pinned in two places and **must be updated together**, otherwise CI, HACS and the test harness drift apart:
 
-1. `requirements.txt` — `homeassistant==<X.Y.Z>` (runtime/CI lint + mypy).
+1. `pyproject.toml` `[dependency-groups] dev` — `homeassistant==<X.Y.Z>` (runtime/CI lint + mypy) **and** `pytest-homeassistant-custom-component==<matching release>` (the test harness ships its own pinned `homeassistant`; the two pins must come from the same HA release, otherwise lint and tests resolve different cores).
 2. `hacs.json` — `"homeassistant": "<X.Y.Z>"` (minimum HA core enforced by HACS).
-3. `requirements_test.txt` — `pytest-homeassistant-custom-component==<matching release>` (the test harness ships its own pinned `homeassistant`; the two pins must come from the same HA release, otherwise lint and tests resolve different cores).
 
-Verify the pairing on PyPI before committing: the `requires_dist` of `pytest-homeassistant-custom-component` must list the same `homeassistant==<X.Y.Z>` you pinned in `requirements.txt`.
+Verify the pairing on PyPI before committing: the `requires_dist` of `pytest-homeassistant-custom-component` must list the same `homeassistant==<X.Y.Z>` you pinned in `pyproject.toml`.
 
 ## Architecture
 

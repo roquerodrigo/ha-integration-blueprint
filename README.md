@@ -44,10 +44,12 @@ Based on [ludeeus/integration_blueprint](https://github.com/ludeeus/integration_
 ## Useful commands
 
 ```bash
-scripts/setup      # install dependencies (requirements.txt)
-scripts/develop    # start Home Assistant in debug mode with the integration loaded
-scripts/lint       # ruff format + check + mypy
-pytest             # run tests with the 95 % coverage gate
+scripts/setup                                              # install dependencies (requirements.txt)
+scripts/develop                                            # start Home Assistant in debug mode with the integration loaded
+uv run ruff format --check .                               # check formatting
+uv run ruff check .                                        # lint
+uv run mypy custom_components/integration_blueprint        # type-check
+uv run pytest                                              # run tests with the 95 % coverage gate
 ```
 
 Each script auto-detects `./.venv` and prepends it to `PATH` — no `source .venv/bin/activate` needed. For ad-hoc commands the same trick works: `.venv/bin/pytest`, `.venv/bin/ruff …`.

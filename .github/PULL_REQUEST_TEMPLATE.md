@@ -12,7 +12,7 @@
 
 ## Test plan
 
-- [ ] `scripts/lint` passes (ruff + mypy)
+- [ ] `uv run ruff format --check .`, `uv run ruff check .` and `uv run mypy custom_components/integration_blueprint` pass
 - [ ] `pytest` passes with the 95 % coverage gate
 - [ ] All translation locales updated (if user-facing strings changed)
 

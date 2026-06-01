@@ -1,8 +1,9 @@
 # Code Style Guide
 
-Style conventions for the `ha-integration-blueprint` project. Run `scripts/lint`
-before committing — it executes `ruff format`, `ruff check --fix` and `mypy`,
-and must exit cleanly. `pytest` (with the 95 % coverage gate) follows.
+Style conventions for the `ha-integration-blueprint` project. Before committing,
+run `uv run ruff format --check .`, `uv run ruff check .` and
+`uv run mypy custom_components/integration_blueprint` — all must exit cleanly.
+`uv run pytest` (with the 95 % coverage gate) follows.
 
 **Always read this file before adding or restructuring code.**
 
@@ -78,7 +79,7 @@ that file in the same PR that satisfies a new rule.
 
 ## Typing
 
-**Strict typing. No generics, no `Any`.** Mypy on `scripts/lint` enforces this.
+**Strict typing. No generics, no `Any`.** Mypy (`uv run mypy custom_components/integration_blueprint`) enforces this.
 
 Banned: `typing.Any`, `object` as a value type, bare `dict` / `list` / `tuple` /
 `set`, `dict[str, Any]`, `Mapping[str, Any]`.
@@ -250,9 +251,10 @@ Both gates must stay green:
   `AwesomeVersion` — CalVer or SemVer.
 - `hacs.json` at the repo root pins the minimum HA core via the
   `homeassistant` key. This is the third HA pin (see `CLAUDE.md`).
-- Brand assets — at minimum a 256×256 `icon.png` — live in the
-  [home-assistant/brands](https://github.com/home-assistant/brands) repo under
-  `custom_integrations/<domain>/`, not in this repo.
+- Brand assets ship **in this repo** under `custom_components/<domain>/brand/`
+  — `icon.png`, `logo.png` (+ `@2x` variants) and `icon.svg`. Bundling them
+  in-repo means HACS installs render correctly without depending on the upstream
+  [home-assistant/brands](https://github.com/home-assistant/brands) repo.
 - A `README.md` at the repo root is required; HACS surfaces it as the
   integration description.
 
@@ -261,8 +263,8 @@ most recent GitHub releases to users, so keep the changelog grep-able.
 
 ## Pre-commit hooks
 
-`pre-commit` is a dev dependency (`requirements.txt`) and `.pre-commit-config.yaml`
-mirrors `scripts/lint` (ruff format, ruff check, mypy). Install once per
+`pre-commit` is a dev dependency (`pyproject.toml`) and `.pre-commit-config.yaml`
+mirrors the lint commands (ruff format, ruff check). Install once per
 clone:
 
 ```bash
@@ -270,7 +272,8 @@ pre-commit install
 ```
 
 The hook runs the same gates as CI on every commit. Skip it only on
-emergency `git commit --no-verify` and immediately re-run `scripts/lint`.
+emergency `git commit --no-verify` and immediately re-run `uv run ruff format --check .`
+and `uv run ruff check .`.
 
 ## Conventional commits
 
@@ -295,11 +298,14 @@ which `release-please` parses to bump the version and generate `CHANGELOG.md`:
 
 ## Linting and verification
 
-- Ruff configuration lives in `.ruff.toml` with `select = ["ALL"]`.
-- Mypy configuration lives in `mypy.ini`. Both run from `scripts/lint`.
-- After every change run `scripts/lint && pytest`. Both gates mirror CI
-  (`.github/workflows/lint.yml` + `tests.yml`).
+- Ruff configuration lives in `pyproject.toml` (`[tool.ruff]`) with `select = ["ALL"]`.
+- Mypy configuration lives in `pyproject.toml` (`[tool.mypy]`). Run both with
+  `uv run ruff check .` and `uv run mypy custom_components/integration_blueprint`.
+- After every change run `uv run ruff format --check .`, `uv run ruff check .`,
+  `uv run mypy custom_components/integration_blueprint` and `uv run pytest`.
+  Both gates mirror CI.
 - Tests live in `tests/`, mirroring the production layout. The 95 % coverage
-  gate (`pytest.ini`) prevents untested code from sneaking in. When a test
+  gate (`pyproject.toml`, `[tool.pytest.ini_options]`) prevents untested code
+  from sneaking in. When a test
   exercises a state that is impossible under the new types, update or remove
   it — never weaken the type to satisfy the test.

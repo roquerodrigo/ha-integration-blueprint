@@ -251,9 +251,10 @@ Both gates must stay green:
   `AwesomeVersion` — CalVer or SemVer.
 - `hacs.json` at the repo root pins the minimum HA core via the
   `homeassistant` key. This is the third HA pin (see `CLAUDE.md`).
-- Brand assets — at minimum a 256×256 `icon.png` — live in the
-  [home-assistant/brands](https://github.com/home-assistant/brands) repo under
-  `custom_integrations/<domain>/`, not in this repo.
+- Brand assets ship **in this repo** under `custom_components/<domain>/brand/`
+  — `icon.png`, `logo.png` (+ `@2x` variants) and `icon.svg`. Bundling them
+  in-repo means HACS installs render correctly without depending on the upstream
+  [home-assistant/brands](https://github.com/home-assistant/brands) repo.
 - A `README.md` at the repo root is required; HACS surfaces it as the
   integration description.
 

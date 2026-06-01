@@ -25,7 +25,7 @@ uv run pytest
 ```
 
 - Lint runs `ruff format`, `ruff check` and `mypy` — all configured in `pyproject.toml`. Fix any failure and re-run before moving on.
-- `pytest` enforces a **95 % coverage gate** (`--cov-fail-under` in `pyproject.toml`).
+- `pytest` enforces a **90 % coverage gate** (`--cov-fail-under` in `pyproject.toml`).
 
 Both gates mirror CI (`.github/workflows/ci.yml`). Skip this only when the change literally cannot affect lint or tests (e.g., README-only edits).
 

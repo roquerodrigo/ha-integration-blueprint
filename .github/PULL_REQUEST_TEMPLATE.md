@@ -13,7 +13,7 @@
 ## Test plan
 
 - [ ] `uv run ruff format --check .`, `uv run ruff check .` and `uv run mypy custom_components/integration_blueprint` pass
-- [ ] `pytest` passes with the 95 % coverage gate
+- [ ] `pytest` passes with the 90 % coverage gate
 - [ ] All translation locales updated (if user-facing strings changed)
 
 ## Checklist

@@ -20,7 +20,7 @@ Based on [ludeeus/integration_blueprint](https://github.com/ludeeus/integration_
 - **Repairs platform** (`repairs.py`) wired into HA's Issue Registry, with sample issue + `ConfirmRepairFlow`.
 - **CI**: ruff lint + format, mypy type-check, `hassfest`, HACS validation, CodeQL security scan.
 - **Pre-commit hooks** (`.pre-commit-config.yaml`) — ruff + JSON/YAML/TOML checks.
-- **Coverage gate** at 95 % enforced by `pytest.ini` (currently at 100 %).
+- **Coverage gate** at 90 % enforced by `pytest.ini` (currently at 100 %).
 - **Devcontainer** (Debian + Python 3.14) and VS Code extension recommendations.
 - **Scripts** that auto-detect `./.venv` (no `source activate` needed) to start HA in debug or run lint.
 - **Tests** with `pytest-homeassistant-custom-component` covering init, config + reauth + reconfigure flows, options flow, coordinator, API client, base entity, sensor, diagnostics, repairs and translation parity.
@@ -49,7 +49,7 @@ scripts/develop                                            # start Home Assistan
 uv run ruff format --check .                               # check formatting
 uv run ruff check .                                        # lint
 uv run mypy custom_components/integration_blueprint        # type-check
-uv run pytest                                              # run tests with the 95 % coverage gate
+uv run pytest                                              # run tests with the 90 % coverage gate
 ```
 
 Each script auto-detects `./.venv` and prepends it to `PATH` — no `source .venv/bin/activate` needed. For ad-hoc commands the same trick works: `.venv/bin/pytest`, `.venv/bin/ruff …`.

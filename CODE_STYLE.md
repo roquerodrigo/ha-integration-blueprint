@@ -3,7 +3,7 @@
 Style conventions for the `ha-integration-blueprint` project. Before committing,
 run `uv run ruff format --check .`, `uv run ruff check .` and
 `uv run mypy custom_components/integration_blueprint` — all must exit cleanly.
-`uv run pytest` (with the 95 % coverage gate) follows.
+`uv run pytest` (with the 90 % coverage gate) follows.
 
 **Always read this file before adding or restructuring code.**
 
@@ -304,7 +304,7 @@ which `release-please` parses to bump the version and generate `CHANGELOG.md`:
 - After every change run `uv run ruff format --check .`, `uv run ruff check .`,
   `uv run mypy custom_components/integration_blueprint` and `uv run pytest`.
   Both gates mirror CI.
-- Tests live in `tests/`, mirroring the production layout. The 95 % coverage
+- Tests live in `tests/`, mirroring the production layout. The 90 % coverage
   gate (`pyproject.toml`, `[tool.pytest.ini_options]`) prevents untested code
   from sneaking in. When a test
   exercises a state that is impossible under the new types, update or remove

@@ -5,7 +5,7 @@
 # directory as a managed project; ``[tool.uv] package = false`` keeps
 # uv from trying to build/install it.
 name = "ha-integration-blueprint"
-version = "0.1.4"
+version = "0.1.5"
 description = "Home Assistant integration blueprint"
 requires-python = ">=3.14.2"
 

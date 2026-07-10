@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.5](https://github.com/roquerodrigo/ha-integration-blueprint/compare/v0.1.4...v0.1.5) (2026-06-21)
+
+
+### Documentation
+
+* drop stale scripts/lint and config-file references from CLAUDE.md ([339fd70](https://github.com/roquerodrigo/ha-integration-blueprint/commit/339fd707fe87e0f0c5dd3dff5bc4746fde645977))
+* fix stale brand-assets location in CODE_STYLE.md ([a0e1dde](https://github.com/roquerodrigo/ha-integration-blueprint/commit/a0e1dde688ae35b92a4718410f2c650d1c2c2553))
+
 ## [0.1.4](https://github.com/roquerodrigo/ha-integration-blueprint/compare/v0.1.3...v0.1.4) (2026-05-25)
 
 

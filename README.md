@@ -22,7 +22,7 @@ Based on [ludeeus/integration_blueprint](https://github.com/ludeeus/integration_
 - **Pre-commit hooks** (`.pre-commit-config.yaml`) — ruff + JSON/YAML/TOML checks.
 - **Coverage gate** at 90 % enforced by `pytest.ini` (currently at 100 %).
 - **Devcontainer** (Debian + Python 3.14) and VS Code extension recommendations.
-- **Scripts** that auto-detect `./.venv` (no `source activate` needed) to start HA in debug or run lint.
+- **Scripts** (`scripts/setup`, `scripts/develop`) built on `uv` — create the `.venv` and start HA in debug with the integration loaded.
 - **Tests** with `pytest-homeassistant-custom-component` covering init, config + reauth + reconfigure flows, options flow, coordinator, API client, base entity, sensor, diagnostics, repairs and translation parity.
 - **Issue templates**, **PR template**, **`.editorconfig`** and grouped Dependabot updates.
 - **Translations** for English and Brazilian Portuguese (with parity test).
@@ -44,7 +44,7 @@ Based on [ludeeus/integration_blueprint](https://github.com/ludeeus/integration_
 ## Useful commands
 
 ```bash
-scripts/setup                                              # install dependencies (requirements.txt)
+scripts/setup                                              # create .venv and install deps (uv sync)
 scripts/develop                                            # start Home Assistant in debug mode with the integration loaded
 uv run ruff format --check .                               # check formatting
 uv run ruff check .                                        # lint
@@ -52,7 +52,7 @@ uv run mypy custom_components/integration_blueprint        # type-check
 uv run pytest                                              # run tests with the 90 % coverage gate
 ```
 
-Each script auto-detects `./.venv` and prepends it to `PATH` — no `source .venv/bin/activate` needed. For ad-hoc commands the same trick works: `.venv/bin/pytest`, `.venv/bin/ruff …`.
+Both scripts run through `uv`, which manages `./.venv` automatically — no `source .venv/bin/activate` needed. For ad-hoc commands, prefix with `uv run` (e.g. `uv run pytest`, `uv run ruff …`).
 
 HA runs with config in `config/` and `PYTHONPATH` pointing at `custom_components/` — no symlinks. To recreate entity/device IDs during development:
 

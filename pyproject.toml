@@ -79,6 +79,10 @@ keep-runtime-typing = true
 max-complexity = 25
 
 [tool.ruff.lint.per-file-ignores]
+# The runtime-data dataclass lives in the data/ subpackage but references the
+# ApiClient and coordinator types from the parent package; a relative parent
+# import is the only form that resolves under both mypy and the HA runtime.
+"**/data/runtime.py" = ["TID252"]
 "tests/**" = [
     "S101",     # assert is normal in pytest
     "S105",     # hardcoded-password-string is fine for fake test credentials

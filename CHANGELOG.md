@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.1.6](https://github.com/roquerodrigo/ha-integration-blueprint/compare/v0.1.5...v0.1.6) (2026-07-11)
+
+
+### Dependencies
+
+* update dev and lint dependencies ([ba82136](https://github.com/roquerodrigo/ha-integration-blueprint/commit/ba821363f58de8e8156d6c045b490eddd2f3c6bb))
+
+
+### Documentation
+
+* align guides with data package and brand placeholder policy ([02052ed](https://github.com/roquerodrigo/ha-integration-blueprint/commit/02052edf40e9eee6d6916c2866884c739c8b2bdf))
+
 ## [0.1.5](https://github.com/roquerodrigo/ha-integration-blueprint/compare/v0.1.4...v0.1.5) (2026-06-21)
 
 

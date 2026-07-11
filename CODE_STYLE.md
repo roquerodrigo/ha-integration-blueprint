@@ -7,24 +7,6 @@ run `uv run ruff format --check .`, `uv run ruff check .` and
 
 **Always read this file before adding or restructuring code.**
 
-## Quality scale target
-
-This blueprint targets **Platinum** on the [Home Assistant Integration Quality
-Scale](https://developers.home-assistant.io/docs/core/integration-quality-scale/).
-Each tier inherits every rule from the previous one:
-
-- **Bronze** — UI setup via `config_flow`, config-flow tests, user-facing docs.
-- **Silver** — active code owner, automatic recovery from connection errors,
-  reauth flow, no log spam on transient failures.
-- **Gold** — full test coverage, entity translations, reconfigure flow,
-  diagnostics download, optional discovery.
-- **Platinum** — strict typing, fully async code base, efficient data handling
-  (no redundant polling or state-machine writes).
-
-Promotion to a tier requires a `quality_scale.yaml` at the integration root
-listing each rule as `done` / `todo` / `exempt` (with a reason). Add or update
-that file in the same PR that satisfies a new rule.
-
 ## Language
 
 - Code is written in **English**: file names, class names, function names,
@@ -36,16 +18,21 @@ that file in the same PR that satisfies a new rule.
 
 ## File organization
 
-- **One top-level class per file.** Multiple semantically related classes (e.g.
-  exception families, sensor entities for one platform) get grouped into a
+- **One top-level class per file — including TypedDicts and dataclasses.**
+  Multiple semantically related classes (exception families, sensor entities
+  for one platform, the typed payloads and runtime data) get grouped into a
   package directory with one class per submodule and an `__init__.py`
   re-exporting the public symbols.
   - Example: `exceptions/` contains `api_client_error.py`,
     `api_client_communication_error.py`, `api_client_authentication_error.py`,
     plus `__init__.py`.
-- **TypedDicts and `type` aliases do not count as "classes"** for this rule —
-  they live alongside related code (typically in `data.py`) and don't need
-  their own file.
+  - Example: `data/` contains `post.py`, `config_data.py`, `options_data.py`,
+    `diagnostics_entry.py`, `diagnostics_payload.py`, `runtime.py`, plus an
+    `__init__.py`. Every TypedDict and dataclass gets its own file — a flat
+    multi-class `data.py` is migration debt, not a valid layout.
+- **`type` aliases are the exception: they live in `data/__init__.py`**
+  alongside the re-exports (`JsonPrimitive`, `JsonValue`, `JsonObject`,
+  `IntegrationBlueprintConfigEntry`), not in their own files.
 - **Helper functions** may live in the same file as the single class that uses
   them (e.g. `_verify_response_or_raise` in `api.py`).
 - **`__init__.py` of the integration package** wires `async_setup_entry`,
@@ -86,12 +73,14 @@ Banned: `typing.Any`, `object` as a value type, bare `dict` / `list` / `tuple` /
 
 Required:
 
-- `TypedDict` for known dict / JSON shapes (see `data.py` for the canonical
-  examples: `IntegrationBlueprintPost`, `IntegrationBlueprintConfigData`,
-  `IntegrationBlueprintOptionsData`, `IntegrationBlueprintDiagnosticsPayload`).
-- `@dataclass` for structured records (`IntegrationBlueprintData`).
+- `TypedDict` for known dict / JSON shapes (see the `data/` package for the
+  canonical examples: `IntegrationBlueprintPost`, `IntegrationBlueprintConfigData`,
+  `IntegrationBlueprintOptionsData`, `IntegrationBlueprintDiagnosticsPayload`,
+  one per file).
+- `@dataclass` for structured records (`IntegrationBlueprintData` in
+  `data/runtime.py`).
 - Named `type` aliases for recursive / shared shapes — `JsonPrimitive`,
-  `JsonValue`, `JsonObject` in `data.py`.
+  `JsonValue`, `JsonObject` in `data/__init__.py`.
 - `frozenset[str]` / `tuple[str, ...]` for fixed string collections.
 - `cast("TypedDictName", value)` at HA framework boundaries that hand us a
   permissive type (e.g. `entry.data` is `MappingProxyType[str, Any]`).
@@ -192,7 +181,7 @@ with a one-line comment explaining the deliberate narrowing — see
 ## Coordinator and runtime data
 
 - All API state flows through `entry.runtime_data: IntegrationBlueprintData`
-  (`data.py`). Never store integration state in `hass.data` — `runtime_data` is
+  (`data/runtime.py`). Never store integration state in `hass.data` — `runtime_data` is
   auto-discarded on unload, the legacy `hass.data[DOMAIN][entry_id]` pattern is
   not.
 - The coordinator is typed as `DataUpdateCoordinator[IntegrationBlueprintPost]`
@@ -223,7 +212,7 @@ with a one-line comment explaining the deliberate narrowing — see
   builder.
 - `options_flow.py` holds the single `IntegrationBlueprintOptionsFlow`
   class. New options keys go into the `IntegrationBlueprintOptionsData`
-  TypedDict in `data.py`.
+  TypedDict in `data/options_data.py`.
 - `repairs.py` exposes `async_create_fix_flow`. Sample helpers like
   `async_raise_deprecated_api_issue` show how to register issues from anywhere
   in the integration.
@@ -251,10 +240,13 @@ Both gates must stay green:
   `AwesomeVersion` — CalVer or SemVer.
 - `hacs.json` at the repo root pins the minimum HA core via the
   `homeassistant` key. This is the third HA pin (see `CLAUDE.md`).
-- Brand assets ship **in this repo** under `custom_components/<domain>/brand/`
-  — `icon.png`, `logo.png` (+ `@2x` variants) and `icon.svg`. Bundling them
-  in-repo means HACS installs render correctly without depending on the upstream
-  [home-assistant/brands](https://github.com/home-assistant/brands) repo.
+- Brand assets live under `custom_components/<domain>/brand/` — `icon.png`,
+  `logo.png` (+ `@2x` variants) and `icon.svg`. The blueprint ships **obvious
+  `TODO` placeholders** (a slate box stamped `TODO / replace me`), not sample
+  artwork: they keep the HACS `brands` check green while making it impossible to
+  mistake them for the real brand. Replace every file per integration and
+  register the assets in
+  [home-assistant/brands](https://github.com/home-assistant/brands).
 - A `README.md` at the repo root is required; HACS surfaces it as the
   integration description.
 

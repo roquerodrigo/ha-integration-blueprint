@@ -38,7 +38,7 @@ Based on [ludeeus/integration_blueprint](https://github.com/ludeeus/integration_
    - Run `grep -rn integration_blueprint .` to catch leftover imports (especially in `tests/`)
 3. Replace the sample API in `api.py` with your real client and adjust `coordinator.py`, `config_flow.py`, `sensor.py` to match.
 4. Update `translations/en.json` and `translations/pt-BR.json` (parity is enforced by tests).
-5. Replace the placeholder brand assets in `custom_components/integration_blueprint/brand/` (`icon.png`, `icon@2x.png`, `logo.png`, `logo@2x.png`) with your own — these satisfy the HACS brand check locally until you register the integration in [`home-assistant/brands`](https://github.com/home-assistant/brands).
+5. Replace the brand assets in `custom_components/integration_blueprint/brand/` — the blueprint ships **obvious `TODO` placeholders**, not usable artwork (see [`brand/README.md`](./custom_components/integration_blueprint/brand/README.md)). Swap `icon.png`, `icon@2x.png`, `icon.svg`, `logo.png` and `logo@2x.png` for your own, then register the integration in [`home-assistant/brands`](https://github.com/home-assistant/brands).
 6. Update `README.md` and `CLAUDE.md` for your integration.
 
 ## Useful commands
@@ -66,10 +66,22 @@ rm config/.storage/core.entity_registry config/.storage/core.device_registry
 custom_components/integration_blueprint/
 ├── __init__.py        # async_setup_entry / unload / reload
 ├── api.py             # ApiClient (single class)
+├── brand/             # brand assets — obvious TODO placeholders, replace per fork
+│   ├── README.md      # what to add when forking
+│   ├── icon.png       # square symbol (+ icon@2x.png)
+│   ├── icon.svg       # vector version of the square icon
+│   └── logo.png       # landscape wordmark (+ logo@2x.png)
 ├── config_flow.py     # user / reauth / reconfigure steps
 ├── const.py           # DOMAIN, LOGGER, URLs, ATTRIBUTION, scan-interval defaults
 ├── coordinator.py     # DataUpdateCoordinator (interval injected from options)
-├── data.py            # typed ConfigEntry + IntegrationBlueprintData dataclass + TypedDicts
+├── data/              # one TypedDict/dataclass per file; type aliases in __init__.py
+│   ├── __init__.py    # type aliases (ConfigEntry, Json*) + re-exports
+│   ├── config_data.py
+│   ├── diagnostics_entry.py
+│   ├── diagnostics_payload.py
+│   ├── options_data.py
+│   ├── post.py
+│   └── runtime.py     # IntegrationBlueprintData dataclass
 ├── diagnostics.py     # downloadable diagnostics with credential redaction
 ├── entity.py          # base CoordinatorEntity
 ├── exceptions/        # one file per exception class

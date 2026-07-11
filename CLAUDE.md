@@ -51,7 +51,7 @@ sensor.py        → reads coordinator.data and creates the entities
 
 ### Entry typing
 
-`data.py` defines `IntegrationBlueprintConfigEntry = ConfigEntry[IntegrationBlueprintData]` and the `IntegrationBlueprintData(client, coordinator, integration)` dataclass. State lives on `entry.runtime_data` (auto-discarded on unload), never on `hass.data`.
+The `data/` package holds one TypedDict/dataclass per file. `data/__init__.py` defines the `type` aliases — `IntegrationBlueprintConfigEntry = ConfigEntry[IntegrationBlueprintData]`, `JsonPrimitive`/`JsonValue`/`JsonObject` — and re-exports every symbol, so consumers still `from .data import …`. The `IntegrationBlueprintData(client, coordinator, integration)` dataclass lives in `data/runtime.py`. State lives on `entry.runtime_data` (auto-discarded on unload), never on `hass.data`.
 
 ### Config flow surface
 

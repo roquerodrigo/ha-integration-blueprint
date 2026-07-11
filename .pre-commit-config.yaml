@@ -2,7 +2,7 @@
 # CI mirrors these checks via .github/workflows/lint.yml
 repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.15.12
+    rev: v0.15.21
     hooks:
       - id: ruff-check
         args: [--fix]

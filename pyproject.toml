@@ -23,7 +23,7 @@ dev = [
 ]
 lint = [
     "ruff==0.15.21",
-    "mypy==2.2.0",
+    "mypy==2.3.0",
 ]
 
 [tool.pytest.ini_options]

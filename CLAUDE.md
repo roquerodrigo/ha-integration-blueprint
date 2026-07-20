@@ -12,6 +12,11 @@ This file deliberately avoids restating those rules — it only adds:
 
 1. The verification workflow agents must run after every change.
 2. The architectural reasoning that is not obvious from `CODE_STYLE.md` alone.
+3. What "based on this blueprint" means for downstream repos.
+
+## Template relationship
+
+This repo is the scaffold other `ha-*` integration repos are created from via GitHub's "Use this template" button (see `README.md` → How to use). That copy is **one-time and one-directional**: once a repo is generated, it has its own `CLAUDE.md`/`CODE_STYLE.md`/CI and diverges immediately — there is no sync mechanism pulling blueprint changes into existing forks. A fix or convention change made here (e.g. a new `CODE_STYLE.md` rule, a CI job bump) only reaches already-forked repos if someone manually ports it over; treat this repo and its forks as independent once generated, not as a shared-source relationship.
 
 ## Verification workflow
 

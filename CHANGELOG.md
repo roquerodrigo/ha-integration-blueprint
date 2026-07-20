@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.7](https://github.com/roquerodrigo/ha-integration-blueprint/compare/v0.1.6...v0.1.7) (2026-07-20)
+
+
+### Documentation
+
+* update CLAUDE.md ([33790df](https://github.com/roquerodrigo/ha-integration-blueprint/commit/33790dfab84bbe60eaaef8ec03daa7b2948c59d8))
+
 ## [0.1.6](https://github.com/roquerodrigo/ha-integration-blueprint/compare/v0.1.5...v0.1.6) (2026-07-11)
 
 

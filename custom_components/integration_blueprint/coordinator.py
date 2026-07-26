@@ -28,7 +28,12 @@ class IntegrationBlueprintDataUpdateCoordinator(
 
     config_entry: IntegrationBlueprintConfigEntry
 
-    def __init__(self, hass: HomeAssistant, scan_interval: timedelta) -> None:
+    def __init__(
+        self,
+        hass: HomeAssistant,
+        scan_interval: timedelta,
+        config_entry: IntegrationBlueprintConfigEntry | None = None,
+    ) -> None:
         """Initialize."""
         super().__init__(
             hass=hass,
@@ -36,6 +41,7 @@ class IntegrationBlueprintDataUpdateCoordinator(
             name=DOMAIN,
             update_interval=scan_interval,
             always_update=False,
+            config_entry=config_entry,
         )
 
     async def _async_update_data(self) -> IntegrationBlueprintPost:

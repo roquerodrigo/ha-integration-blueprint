@@ -34,6 +34,7 @@ async def async_setup_entry(
     coordinator = IntegrationBlueprintDataUpdateCoordinator(
         hass=hass,
         scan_interval=timedelta(seconds=scan_interval_seconds),
+        config_entry=entry,
     )
     entry.runtime_data = IntegrationBlueprintData(
         client=IntegrationBlueprintApiClient(

@@ -34,7 +34,8 @@
         "abort": {
             "already_configured": "This account is already configured.",
             "reauth_successful": "Re-authentication was successful.",
-            "reconfigure_successful": "Reconfiguration was successful."
+            "reconfigure_successful": "Reconfiguration was successful.",
+            "unique_id_mismatch": "The account does not match the one this entry was set up with."
         }
     },
     "options": {

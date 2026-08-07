@@ -89,5 +89,5 @@ class IntegrationBlueprintApiClient:
         except IntegrationBlueprintApiClientError:
             raise
         except Exception as exception:
-            msg = f"Something really wrong happened! - {exception}"
+            msg = f"Failed to process the API response: {exception}"
             raise IntegrationBlueprintApiClientError(msg) from exception

@@ -145,6 +145,21 @@ async def test_reauth_success_updates_entry(hass, enable_custom_integrations):
     assert entry.data["password"] == "newpass"
 
 
+async def test_reauth_different_account_aborts(hass, enable_custom_integrations):
+    entry = _existing_entry(hass)
+    with _patch_client() as mock:
+        mock.return_value.async_get_data = AsyncMock(return_value={"title": "ok"})
+        result = await entry.start_reauth_flow(hass)
+        result = await hass.config_entries.flow.async_configure(
+            result["flow_id"],
+            user_input={"username": "another_user", "password": "newpass"},
+        )
+    assert result["type"] == FlowResultType.ABORT
+    assert result["reason"] == "unique_id_mismatch"
+    assert entry.data["username"] == "user"
+    assert entry.data["password"] == "pass"
+
+
 async def test_reauth_auth_error_shows_auth(hass, enable_custom_integrations):
     entry = _existing_entry(hass)
     with _patch_client() as mock:
@@ -180,6 +195,21 @@ async def test_reconfigure_success_updates_entry(hass, enable_custom_integration
     assert result["type"] == FlowResultType.ABORT
     assert result["reason"] == "reconfigure_successful"
     assert entry.data["password"] == "newpass"
+
+
+async def test_reconfigure_different_account_aborts(hass, enable_custom_integrations):
+    entry = _existing_entry(hass)
+    with _patch_client() as mock:
+        mock.return_value.async_get_data = AsyncMock(return_value={"title": "ok"})
+        result = await entry.start_reconfigure_flow(hass)
+        result = await hass.config_entries.flow.async_configure(
+            result["flow_id"],
+            user_input={"username": "another_user", "password": "newpass"},
+        )
+    assert result["type"] == FlowResultType.ABORT
+    assert result["reason"] == "unique_id_mismatch"
+    assert entry.data["username"] == "user"
+    assert entry.data["password"] == "pass"
 
 
 async def test_reconfigure_communication_error_shows_connection(

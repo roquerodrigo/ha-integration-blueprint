@@ -3,13 +3,13 @@
 [![CI](https://github.com/roquerodrigo/ha-integration-blueprint/actions/workflows/ci.yml/badge.svg)](https://github.com/roquerodrigo/ha-integration-blueprint/actions/workflows/ci.yml)
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://github.com/hacs/integration)
 
+[![Open your Home Assistant instance and open the repository inside HACS.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=roquerodrigo&repository=ha-integration-blueprint&category=integration)
+
+---
+
 Template for creating custom [Home Assistant](https://www.home-assistant.io/) integrations distributable via [HACS](https://hacs.xyz/).
 
 Based on [ludeeus/integration_blueprint](https://github.com/ludeeus/integration_blueprint), with adaptations used in the [@roquerodrigo](https://github.com/roquerodrigo) integrations. Conventions for contributors live in [`CODE_STYLE.md`](./CODE_STYLE.md); architectural notes for AI agents in [`CLAUDE.md`](./CLAUDE.md).
-
-## Add to Home Assistant
-
-[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=roquerodrigo&repository=ha-integration-blueprint&category=integration)
 
 ## What's included
 

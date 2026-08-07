@@ -262,10 +262,45 @@ Both gates must stay green:
   register the assets in
   [home-assistant/brands](https://github.com/home-assistant/brands).
 - A `README.md` at the repo root is required; HACS surfaces it as the
-  integration description.
+  integration description. Its header follows the layout below.
 
 Release-please tags releases on every merge to `main`; HACS surfaces the five
 most recent GitHub releases to users, so keep the changelog grep-able.
+
+## README header
+
+Every repository opens `README.md` with the same header, in this exact order:
+**title → badges → HACS link → `---` separator → the rest of the document.**
+
+```markdown
+# <Title>
+
+[![CI](https://github.com/roquerodrigo/<repo>/actions/workflows/ci.yml/badge.svg)](https://github.com/roquerodrigo/<repo>/actions/workflows/ci.yml)
+[![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://github.com/hacs/integration)
+
+[![Open your Home Assistant instance and open the repository inside HACS.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=roquerodrigo&repository=<repo>&category=integration)
+
+---
+```
+
+- `owner=` is always `roquerodrigo`; `repository=` is the repository name.
+- `category=integration` for an integration; `category=plugin` for a Lovelace
+  card repository.
+- The HACS link is a paragraph of its own, separated from the badge block by a
+  blank line. The badge row and the "Open your Home Assistant instance" button
+  are different things and must not run together.
+- Preserve the badges a repository already carries and invent no new ones; all
+  of them belong **before** the HACS link.
+- The `---` immediately after the HACS link is the header separator. A README
+  that already uses `---` further down keeps those as section breaks — do not
+  add a second separator to the header.
+
+**A private repository gets no HACS link.** `my.home-assistant.io` resolves the
+target through the public GitHub API, so on a private repository the button
+lands on something HACS cannot install. It is the same reason those repositories
+call the validate workflow with `hacs: false`. Ship the title, the badges and
+the separator, and add the link when — and only when — the repository is made
+public.
 
 ## Quality scale
 

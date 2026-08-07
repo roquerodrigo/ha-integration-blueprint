@@ -10,12 +10,13 @@ from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.loader import async_get_loaded_integration
 
 from .api import IntegrationBlueprintApiClient
-from .const import DEFAULT_SCAN_INTERVAL_SECONDS
+from .const import DEFAULT_SCAN_INTERVAL_SECONDS, DOMAIN
 from .coordinator import IntegrationBlueprintDataUpdateCoordinator
 from .data import IntegrationBlueprintData
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
+    from homeassistant.helpers.device_registry import DeviceEntry
 
     from .data import IntegrationBlueprintConfigData, IntegrationBlueprintConfigEntry
 
@@ -68,3 +69,26 @@ async def async_reload_entry(
 ) -> None:
     """Reload config entry."""
     await hass.config_entries.async_reload(entry.entry_id)
+
+
+async def async_remove_config_entry_device(
+    hass: HomeAssistant,  # noqa: ARG001 -- part of the signature Home Assistant calls
+    entry: IntegrationBlueprintConfigEntry,
+    device_entry: DeviceEntry,
+) -> bool:
+    """
+    Allow deleting devices this entry no longer provides.
+
+    Home Assistant hides the "delete device" button unless the integration
+    implements this hook, so without it a device that the account stopped
+    exposing — hardware that was replaced, an endpoint that disappeared — stays
+    in the registry forever with all of its entities unavailable, and the only
+    way out is deleting the whole config entry.
+
+    This blueprint serves a single device keyed by the entry id, so that one is
+    refused (the next refresh would recreate it anyway) and anything else left
+    behind is allowed to go. An integration serving one device per upstream
+    item should instead refuse only the identifiers present in the latest
+    coordinator payload.
+    """
+    return (DOMAIN, entry.entry_id) not in device_entry.identifiers

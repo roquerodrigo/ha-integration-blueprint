@@ -88,3 +88,37 @@ async def test_scan_interval_picks_up_options(
     from datetime import timedelta
 
     assert entry.runtime_data.coordinator.update_interval == timedelta(seconds=60)
+
+
+async def test_remove_device_refuses_the_device_the_entry_provides(
+    hass, setup_integration
+):
+    from homeassistant.helpers import device_registry as dr
+
+    from custom_components.integration_blueprint import (
+        async_remove_config_entry_device,
+    )
+    from custom_components.integration_blueprint.const import DOMAIN
+
+    device = dr.async_get(hass).async_get_device(
+        identifiers={(DOMAIN, setup_integration.entry_id)}
+    )
+    assert device is not None
+    assert not await async_remove_config_entry_device(hass, setup_integration, device)
+
+
+async def test_remove_device_allows_a_device_the_entry_no_longer_provides(
+    hass, setup_integration
+):
+    from homeassistant.helpers import device_registry as dr
+
+    from custom_components.integration_blueprint import (
+        async_remove_config_entry_device,
+    )
+    from custom_components.integration_blueprint.const import DOMAIN
+
+    stale = dr.async_get(hass).async_get_or_create(
+        config_entry_id=setup_integration.entry_id,
+        identifiers={(DOMAIN, "device-that-went-away")},
+    )
+    assert await async_remove_config_entry_device(hass, setup_integration, stale)

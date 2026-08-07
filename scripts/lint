@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+set -e
+
+cd "$(dirname "$0")/.."
+
+uv run ruff format --check .
+uv run ruff check .
+uv run mypy custom_components/integration_blueprint
+uv run pytest

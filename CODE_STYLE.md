@@ -265,16 +265,19 @@ most recent GitHub releases to users, so keep the changelog grep-able.
 ## Pre-commit hooks
 
 `pre-commit` is a dev dependency (`pyproject.toml`) and `.pre-commit-config.yaml`
-mirrors the lint commands (ruff format, ruff check). Install once per
-clone:
+runs ruff format, ruff check and mypy as **local hooks through `uv run`**, so
+every commit uses the exact tool versions pinned in `pyproject.toml`/`uv.lock` —
+the same ones CI resolves. Never switch these to mirrored hooks
+(`ruff-pre-commit`, `mirrors-mypy`): a mirrored hook carries its own version
+pin that silently drifts from the project's. Install once per clone:
 
 ```bash
 pre-commit install
 ```
 
-The hook runs the same gates as CI on every commit. Skip it only on
-emergency `git commit --no-verify` and immediately re-run `uv run ruff format --check .`
-and `uv run ruff check .`.
+The hook runs the same lint gates as CI on every commit. Skip it only on
+emergency `git commit --no-verify` and immediately re-run `scripts/lint` (or
+the equivalent direct commands).
 
 ## Conventional commits
 

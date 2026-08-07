@@ -30,7 +30,6 @@ class IntegrationBlueprintTitleSensor(IntegrationBlueprintEntity, SensorEntity):
     """Sensor exposing the latest post title returned by the API."""
 
     _attr_translation_key = "title"
-    _attr_icon = "mdi:format-quote-close"
 
     @property
     def unique_id(self) -> str:

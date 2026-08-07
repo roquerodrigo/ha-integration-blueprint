@@ -1,0 +1,9 @@
+{
+    "entity": {
+        "sensor": {
+            "title": {
+                "default": "mdi:format-quote-close"
+            }
+        }
+    }
+}

@@ -89,6 +89,7 @@ custom_components/integration_blueprint/
 │   ├── api_client_authentication_error.py
 │   ├── api_client_communication_error.py
 │   └── api_client_error.py
+├── icons.json         # entity icons keyed by translation_key
 ├── manifest.json
 ├── options_flow.py    # OptionsFlow with scan_interval
 ├── repairs.py         # Repair platform: async_create_fix_flow + sample issue

@@ -8,6 +8,7 @@ import pytest
 
 from custom_components.integration_blueprint.api import (
     IntegrationBlueprintApiClient,
+    _sanitized_error_text,
     _verify_response_or_raise,
 )
 from custom_components.integration_blueprint.exceptions import (
@@ -141,3 +142,35 @@ async def test_api_wrapper_returns_json_on_success(sample_payload):
     session, _ = _make_session(sample_payload)
     result = await _client(session)._api_wrapper(method="get", url="http://x")
     assert result == sample_payload
+
+
+def test_sanitized_error_text_redacts_the_query_string():
+    exception = aiohttp.ClientError(
+        "Cannot connect to https://example.com/posts?api_key=supersecret"
+    )
+    sanitized = _sanitized_error_text(exception)
+    assert "supersecret" not in sanitized
+    assert sanitized.endswith("https://example.com/posts?<redacted>")
+
+
+def test_sanitized_error_text_keeps_text_without_a_query_string():
+    assert _sanitized_error_text(TimeoutError("timed out")) == "timed out"
+
+
+async def test_api_wrapper_client_error_message_hides_credentials():
+    session, _ = _make_session(
+        side_effect=aiohttp.ClientError("GET https://example.com/posts?token=hunter2")
+    )
+    with pytest.raises(IntegrationBlueprintApiClientCommunicationError) as excinfo:
+        await _client(session)._api_wrapper(method="get", url="http://x")
+    assert "hunter2" not in str(excinfo.value)
+    assert "<redacted>" in str(excinfo.value)
+
+
+async def test_api_wrapper_timeout_message_hides_credentials():
+    session, _ = _make_session(
+        side_effect=TimeoutError("https://example.com/posts?token=hunter2 timed out")
+    )
+    with pytest.raises(IntegrationBlueprintApiClientCommunicationError) as excinfo:
+        await _client(session)._api_wrapper(method="get", url="http://x")
+    assert "hunter2" not in str(excinfo.value)

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+import re
 import socket
 from typing import TYPE_CHECKING, cast
 
@@ -19,6 +20,23 @@ if TYPE_CHECKING:
     from collections.abc import Mapping
 
     from .data import IntegrationBlueprintPost, JsonObject, JsonValue
+
+
+_URL_QUERY_STRING = re.compile(r"\?\S*")
+
+
+def _sanitized_error_text(exception: BaseException) -> str:
+    """
+    Strip URL query strings from upstream error text before it reaches the log.
+
+    HTTP client libraries quote the request URL in their exception messages,
+    and Home Assistant writes the message of an ``UpdateFailed`` to the log on
+    every failed refresh. Whenever the API carries a credential as a query
+    parameter — an API key, a session id, a signature — an ordinary connection
+    failure would otherwise publish it verbatim. Redact the query string on the
+    way out instead of trusting every future call site to remember.
+    """
+    return _URL_QUERY_STRING.sub("?<redacted>", str(exception))
 
 
 def _verify_response_or_raise(response: aiohttp.ClientResponse) -> None:
@@ -81,10 +99,12 @@ class IntegrationBlueprintApiClient:
                 return cast("JsonObject", await response.json())
 
         except TimeoutError as exception:
-            msg = f"Timeout error fetching information - {exception}"
+            detail = _sanitized_error_text(exception)
+            msg = f"Timeout error fetching information - {detail}"
             raise IntegrationBlueprintApiClientCommunicationError(msg) from exception
         except (aiohttp.ClientError, socket.gaierror) as exception:
-            msg = f"Error fetching information - {exception}"
+            detail = _sanitized_error_text(exception)
+            msg = f"Error fetching information - {detail}"
             raise IntegrationBlueprintApiClientCommunicationError(msg) from exception
         except IntegrationBlueprintApiClientError:
             raise

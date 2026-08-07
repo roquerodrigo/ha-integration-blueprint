@@ -20,7 +20,7 @@ This repo is the scaffold other `ha-*` integration repos are created from via Gi
 
 ## Verification workflow
 
-**After every code change, always run lint then tests, in that order, before declaring the task done. Run the tools directly (no `scripts/lint` wrapper):**
+**After every code change, always run lint then tests, in that order, before declaring the task done. Either run `scripts/lint` (a thin wrapper that only chains the four commands) or run them directly:**
 
 ```bash
 uv run ruff format --check .

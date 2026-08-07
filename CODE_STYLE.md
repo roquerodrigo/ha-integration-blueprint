@@ -30,6 +30,11 @@ run `uv run ruff format --check .`, `uv run ruff check .` and
     `diagnostics_entry.py`, `diagnostics_payload.py`, `runtime.py`, plus an
     `__init__.py`. Every TypedDict and dataclass gets its own file — a flat
     multi-class `data.py` is migration debt, not a valid layout.
+  - **Relaxations**: a TypedDict or `type` alias consumed by a single module
+    may live in that consuming module instead of its own file, and leaf
+    dataclasses that describe fragments of the same payload may share one
+    module. The package-with-one-class-per-submodule layout remains the
+    default the moment a shape is shared across modules.
 - **`type` aliases are the exception: they live in `data/__init__.py`**
   alongside the re-exports (`JsonPrimitive`, `JsonValue`, `JsonObject`,
   `IntegrationBlueprintConfigEntry`), not in their own files.
@@ -253,6 +258,16 @@ Both gates must stay green:
 Release-please tags releases on every merge to `main`; HACS surfaces the five
 most recent GitHub releases to users, so keep the changelog grep-able.
 
+## Quality scale
+
+- `quality_scale.yaml` is **optional** and the blueprint does not ship one. It
+  is required only when `manifest.json` declares a `quality_scale` tier — and
+  then every claim in it must be honest (`done` only when the rule is actually
+  implemented; use `todo`/`exempt` otherwise).
+- The goal is to apply the [Bronze/Silver/Gold rules](https://developers.home-assistant.io/docs/core/integration-quality-scale/)
+  that are pertinent to the integration; Platinum is an aspiration, not a
+  review gate.
+
 ## Pre-commit hooks
 
 `pre-commit` is a dev dependency (`pyproject.toml`) and `.pre-commit-config.yaml`
@@ -295,7 +310,10 @@ which `release-please` parses to bump the version and generate `CHANGELOG.md`:
   `uv run ruff check .` and `uv run mypy custom_components/integration_blueprint`.
 - After every change run `uv run ruff format --check .`, `uv run ruff check .`,
   `uv run mypy custom_components/integration_blueprint` and `uv run pytest`.
-  Both gates mirror CI.
+  Both gates mirror CI. `scripts/lint` is a thin wrapper that only chains
+  these four commands — running it or running the commands directly is
+  equivalent; the wrapper exists so CI, docs and local habits share one
+  source of truth.
 - Tests live in `tests/`, mirroring the production layout. The 90 % coverage
   gate (`pyproject.toml`, `[tool.pytest.ini_options]`) prevents untested code
   from sneaking in. When a test

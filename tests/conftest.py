@@ -25,13 +25,6 @@ def sample_payload() -> dict:
 
 
 @pytest.fixture
-def enable_custom_integrations(hass) -> None:
-    from homeassistant.loader import DATA_CUSTOM_COMPONENTS
-
-    hass.data.pop(DATA_CUSTOM_COMPONENTS, None)
-
-
-@pytest.fixture
 def mock_api_client(sample_payload: dict) -> Generator:
     with patch(
         "custom_components.integration_blueprint.IntegrationBlueprintApiClient"

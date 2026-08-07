@@ -48,7 +48,7 @@ The project uses [ruff](https://docs.astral.sh/ruff/) (config in `pyproject.toml
 
 This template is based on [integration_blueprint template](https://github.com/ludeeus/integration_blueprint).
 
-It comes with a development environment in a container, easy to launch if you use Visual Studio Code. With this container you will have a stand-alone Home Assistant instance running and already configured with the included [`configuration.yaml`](./config/configuration.yaml) file.
+Run `scripts/setup` once to create the `uv`-managed virtual environment, then `scripts/develop` to start a stand-alone Home Assistant instance in debug mode with the integration loaded and the included [`configuration.yaml`](./config/configuration.yaml) file.
 
 ## License
 

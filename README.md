@@ -19,9 +19,8 @@ Based on [ludeeus/integration_blueprint](https://github.com/ludeeus/integration_
 - **Diagnostics platform** with credential redaction (`diagnostics.py`).
 - **Repairs platform** (`repairs.py`) wired into HA's Issue Registry, with sample issue + `ConfirmRepairFlow`.
 - **CI**: ruff lint + format, mypy type-check, `hassfest`, HACS validation, CodeQL security scan.
-- **Pre-commit hooks** (`.pre-commit-config.yaml`) — ruff + JSON/YAML/TOML checks.
-- **Coverage gate** at 90 % enforced by `pytest.ini` (currently at 100 %).
-- **Devcontainer** (Debian + Python 3.14) and VS Code extension recommendations.
+- **Pre-commit hooks** (`.pre-commit-config.yaml`) mirroring the lint gates plus file hygiene checks.
+- **Coverage gate** at 90 % enforced by `pyproject.toml` (`--cov-fail-under`).
 - **Scripts** (`scripts/setup`, `scripts/develop`) built on `uv` — create the `.venv` and start HA in debug with the integration loaded.
 - **Tests** with `pytest-homeassistant-custom-component` covering init, config + reauth + reconfigure flows, options flow, coordinator, API client, base entity, sensor, diagnostics, repairs and translation parity.
 - **Issue templates**, **PR template**, **`.editorconfig`** and grouped Dependabot updates.
@@ -113,9 +112,12 @@ This wires ruff + basic file hygiene checks (`.pre-commit-config.yaml`) into eve
 
 ## CI
 
-- **`lint.yml`** — ruff (check + format) and mypy (Python 3.14)
-- **`validate.yml`** — `hassfest` + HACS validation; push/PR to `main` and a daily cron
+All workflows call the reusable workflows in [`roquerodrigo/workflows`](https://github.com/roquerodrigo/workflows):
+
+- **`ci.yml`** — ruff (check + format) + mypy, pytest with the coverage gate, and `hassfest` + HACS validation; push/PR to `main`
 - **`codeql.yml`** — GitHub CodeQL security scan; push/PR to `main` and a weekly cron
+- **`release.yml`** — release-please, gated on a green CI run on `main`
+- **`auto-assign.yml`** — assigns new issues/PRs to the code owner
 
 ## License
 

@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.8](https://github.com/roquerodrigo/ha-integration-blueprint/compare/v0.1.7...v0.1.8) (2026-08-07)
+
+
+### Documentation
+
+* define the canonical README header layout ([f322831](https://github.com/roquerodrigo/ha-integration-blueprint/commit/f322831d92b499e6ea0159327c8b51600606dc49))
+* normalize README header layout ([d117447](https://github.com/roquerodrigo/ha-integration-blueprint/commit/d117447f8b7d9afeb2c9fdcaf78756249ee6b42f))
+
 ## [0.1.7](https://github.com/roquerodrigo/ha-integration-blueprint/compare/v0.1.6...v0.1.7) (2026-08-07)
 
 

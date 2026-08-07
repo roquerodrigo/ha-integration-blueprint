@@ -119,6 +119,15 @@ All workflows call the reusable workflows in [`roquerodrigo/workflows`](https://
 - **`release.yml`** — release-please, gated on a green CI run on `main`
 - **`auto-assign.yml`** — assigns new issues/PRs to the code owner
 
+## Companion SDK
+
+Integrations that wrap a device or cloud protocol keep that code in a separate
+package, released to PyPI and pinned from `manifest.json`. [`sdk-template/`](./sdk-template)
+scaffolds that repository — `src/` layout, `py.typed`, hatchling build,
+network-free tests with an opt-in live suite, and the release-to-PyPI workflow.
+Copy its contents into the SDK's own repository; it is not part of the
+integration, so delete the directory in a fork that does not need one.
+
 ## License
 
 [MIT](LICENSE)

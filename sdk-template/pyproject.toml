@@ -1,0 +1,119 @@
+[project]
+name = "sdk-template"
+version = "0.1.0"
+description = "Python SDK template for a Home Assistant companion integration"
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "MIT" }
+authors = [{ name = "Rodrigo Roque", email = "rodrigogoncalvesroque@gmail.com" }]
+keywords = ["sdk", "home-automation", "homeassistant"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Home Automation",
+]
+# Runtime dependencies carry a floor and nothing else. Home Assistant pins its
+# own transitive dependencies exactly, so an `==` pin — or an upper bound —
+# eventually contradicts HA's pin and the consuming integration stops
+# installing. Exact versions belong in the dependency groups below and in
+# uv.lock, neither of which reaches the consumer.
+dependencies = [
+    "aiohttp>=3.11",
+]
+
+[project.urls]
+Homepage = "https://github.com/roquerodrigo/sdk-template"
+Repository = "https://github.com/roquerodrigo/sdk-template"
+Issues = "https://github.com/roquerodrigo/sdk-template/issues"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/sdk_template"]
+
+# hatchling packages Python files only; the PEP 561 marker has to be named
+# explicitly or consumers get `Any` for everything the SDK exports.
+[tool.hatch.build.targets.wheel.force-include]
+"src/sdk_template/py.typed" = "sdk_template/py.typed"
+
+[tool.hatch.build.targets.sdist]
+exclude = ["tests"]
+
+[dependency-groups]
+dev = [
+    "pytest==9.0.3",
+    "pytest-asyncio==1.4.0",
+    "pytest-cov==7.1.0",
+    "pre-commit==4.6.1",
+]
+lint = [
+    "ruff==0.16.1",
+    "mypy==2.3.0",
+]
+
+[tool.uv]
+default-groups = ["dev", "lint"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+addopts = [
+    "--strict-markers",
+    "--cov=src/sdk_template",
+    "--cov-report=term-missing",
+    "--cov-fail-under=90",
+]
+
+[tool.mypy]
+python_version = "3.12"
+files = ["src"]
+strict = true
+warn_unreachable = true
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+disallow_untyped_defs = false
+check_untyped_defs = false
+
+[tool.ruff]
+target-version = "py312"
+src = ["src", "tests"]
+
+[tool.ruff.format]
+exclude = ["*.md"]  # ruff 0.16 formats Python blocks in Markdown; docs keep their own layout
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+    "ANN401",  # Dynamically typed expressions (typing.Any) are disallowed
+    "D203",    # no-blank-line-before-class (incompatible with formatter)
+    "D212",    # multi-line-summary-first-line (incompatible with formatter)
+    "COM812",  # incompatible with formatter
+    "ISC001",  # incompatible with formatter
+    "CPY001",  # copyright headers are not used in this project
+]
+
+[tool.ruff.lint.flake8-pytest-style]
+fixture-parentheses = false
+
+[tool.ruff.lint.pyupgrade]
+keep-runtime-typing = true
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = [
+    "S101",     # assert is normal in pytest
+    "S105",     # hardcoded-password-string is fine for fake test credentials
+    "S106",     # hardcoded-password-func-arg is fine for fake test credentials
+    "D",        # no docstrings required in tests
+    "ANN",      # no type annotations required in tests
+    "ARG001",   # fixtures are used implicitly by pytest
+    "SLF001",   # testing internal methods is intentional
+    "PLR2004",  # magic numbers in test assertions are fine
+]

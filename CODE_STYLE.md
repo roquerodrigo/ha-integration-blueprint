@@ -52,6 +52,10 @@ run `uv run ruff format --check .`, `uv run ruff check .` and
 - The reason: each entity is a discrete contract; mixing them through a
   generic class hides the contract behind indirection and discourages per-entity
   refinement (icons, state attributes, custom logic).
+- **Entity icons live in `icons.json`**
+  (`entity.<platform>.<translation_key>.default`), keyed by the entity's
+  `translation_key` — not in `_attr_icon`. The icons file supports state- and
+  range-based variants and keeps presentation out of Python.
 
 ## Naming
 
@@ -238,6 +242,11 @@ Both gates must stay green:
   `issue_tracker`, `codeowners`. The `version` key is **mandatory for custom
   integrations** (omit it in core integrations only) and must parse as
   `AwesomeVersion` — CalVer or SemVer.
+- `manifest.json` also declares `integration_type`. JSON carries no comments,
+  so the choice is recorded here: the blueprint ships `service` because one
+  config entry of the sample integration represents an account on a cloud
+  service — pick `device` when an entry is a single physical device, or `hub`
+  when it is a gateway exposing several, and adjust per fork.
 - `hacs.json` at the repo root pins the minimum HA core via the
   `homeassistant` key. This is the third HA pin (see `CLAUDE.md`).
 - Brand assets live under `custom_components/<domain>/brand/` — `icon.png`,

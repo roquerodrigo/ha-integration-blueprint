@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.1.9](https://github.com/roquerodrigo/ha-integration-blueprint/compare/v0.1.8...v0.1.9) (2026-08-24)
+
+
+### Features
+
+* **hacs:** ship the install zip with every release ([8cb4e69](https://github.com/roquerodrigo/ha-integration-blueprint/commit/8cb4e690f6f8d1976937bcf4b73e454fd4291f60))
+
+
+### Development Dependencies
+
+* **deps-dev:** bump the python-deps group across 1 directory with 3 updates ([c051cd0](https://github.com/roquerodrigo/ha-integration-blueprint/commit/c051cd058864612b3ef930605d86e14f2cdac018))
+
 ## [0.1.8](https://github.com/roquerodrigo/ha-integration-blueprint/compare/v0.1.7...v0.1.8) (2026-08-07)
 
 

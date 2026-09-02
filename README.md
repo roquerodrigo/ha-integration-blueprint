@@ -3,6 +3,8 @@
 [![CI](https://github.com/roquerodrigo/ha-integration-blueprint/actions/workflows/ci.yml/badge.svg)](https://github.com/roquerodrigo/ha-integration-blueprint/actions/workflows/ci.yml)
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://github.com/hacs/integration)
 
+[![Sponsor](https://img.shields.io/badge/Sponsor-%E2%9D%A4-db61a2?logo=githubsponsors&logoColor=white&style=for-the-badge)](https://github.com/sponsors/roquerodrigo)
+
 [![Open your Home Assistant instance and open the repository inside HACS.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=roquerodrigo&repository=ha-integration-blueprint&category=integration)
 
 ---
@@ -127,6 +129,10 @@ scaffolds that repository — `src/` layout, `py.typed`, hatchling build,
 network-free tests with an opt-in live suite, and the release-to-PyPI workflow.
 Copy its contents into the SDK's own repository; it is not part of the
 integration, so delete the directory in a fork that does not need one.
+
+## Support
+
+This template is built and maintained on personal time. If it is useful to you, consider [sponsoring the work](https://github.com/sponsors/roquerodrigo) — it keeps the development, the testing and the releases coming.
 
 ## License
 

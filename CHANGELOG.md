@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.1.10](https://github.com/roquerodrigo/ha-integration-blueprint/compare/v0.1.9...v0.1.10) (2026-09-07)
+
+
+### Dependencies
+
+* **deps:** bump pip from 26.1.2 to 26.2 ([e9dc1d4](https://github.com/roquerodrigo/ha-integration-blueprint/commit/e9dc1d492101071b4d8be4e6467e37dfb63db2fa))
+
+
+### Development Dependencies
+
+* **deps-dev:** bump ruff ([4eeef36](https://github.com/roquerodrigo/ha-integration-blueprint/commit/4eeef362bf0b360731372b42394ea4a4ba6328a6))
+
+
+### Documentation
+
+* add GitHub Sponsors button and support section ([0ca0303](https://github.com/roquerodrigo/ha-integration-blueprint/commit/0ca030397b65c90895f405e28aaaa172b47ace82))
+* refresh CLAUDE.md ([e815e99](https://github.com/roquerodrigo/ha-integration-blueprint/commit/e815e9982ae6e478686555a564272428e26d74f9))
+
 ## [0.1.9](https://github.com/roquerodrigo/ha-integration-blueprint/compare/v0.1.8...v0.1.9) (2026-08-24)
 
 

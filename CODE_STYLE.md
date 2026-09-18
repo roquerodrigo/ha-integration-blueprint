@@ -13,15 +13,27 @@ run `uv run ruff format --check .`, `uv run ruff check .` and
   variable names, dictionary keys, identifier strings.
 - The conversation language with the user can be Portuguese or anything else;
   it never decides what is committed to disk.
-- **A country-specific repository documents itself in that country's
-  language.** When `hacs.json` declares `country`, the README, the other
-  Markdown docs, docstrings and code comments are written in the language of
-  that country (`["BR"]` → Brazilian Portuguese). Without `country` — or when
-  the listed countries do not share a language — documentation stays English.
+- **A country-specific repository speaks that country's language everywhere a
+  human reads prose.** When `hacs.json` declares `country`, everything below is
+  written in the language of that country (`["BR"]` → Brazilian Portuguese).
+  Without `country` — or when the listed countries do not share a language —
+  all of it stays English.
+  - Documentation: README, `CONTRIBUTING.md`, `SECURITY.md`, every other
+    Markdown doc, docstrings and code comments.
+  - Git history: commit subjects and bodies, PR titles and descriptions.
+  - Releases: release notes and `CHANGELOG.md`, including the section headings
+    — translate every `section` of `changelog-sections` in
+    `release-please-config.json` (`"Features"` → `"Funcionalidades"`).
+  - Public communication: issues, issue and PR comments, review comments,
+    discussions, the issue templates and the PR template under `.github/`.
+  - Repository metadata: the GitHub description, and `description` in
+    `pyproject.toml`.
 - **Code stays English regardless of `country`**: the language of the prose
-  never leaks into identifiers, file names, keys or log messages. Commit
-  messages, PR titles and changelogs also stay English — the release tooling
-  builds the changelog from them.
+  never leaks into identifiers, file names, branch names, keys or log
+  messages. Whatever a tool parses is code too: the Conventional Commits type
+  and scope (`feat(sensor): adiciona a bandeira tarifária`), the
+  `BREAKING CHANGE:` footer, workflow and job ids, labels. `translations/en.json`
+  is still required next to the country's locale.
 - **Native domain terms keep their original language, in code and in prose.**
   They are the ubiquitous language shared with the users and with the upstream
   service, and a translation only forces everyone to map it back: write

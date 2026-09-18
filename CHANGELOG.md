@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.1.11](https://github.com/roquerodrigo/ha-integration-blueprint/compare/v0.1.10...v0.1.11) (2026-09-18)
+
+
+### Development Dependencies
+
+* **deps-dev:** bump ruff in the python-deps group ([2e8c633](https://github.com/roquerodrigo/ha-integration-blueprint/commit/2e8c633cf29d2c2260ec5758e7a45993aa848958))
+
+
+### Documentation
+
+* document the HACS country key and the documentation language it implies ([e5bf57a](https://github.com/roquerodrigo/ha-integration-blueprint/commit/e5bf57afa3d190a8ae86ffc63592884ef74f8b04))
+* extend the country language to commits, PRs, releases and public communication ([bb58f90](https://github.com/roquerodrigo/ha-integration-blueprint/commit/bb58f9093ce86c8c0f77fba14005c830c5215d9f))
+
 ## [0.1.10](https://github.com/roquerodrigo/ha-integration-blueprint/compare/v0.1.9...v0.1.10) (2026-09-07)
 
 

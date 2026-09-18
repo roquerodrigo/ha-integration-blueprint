@@ -35,6 +35,7 @@ Based on [ludeeus/integration_blueprint](https://github.com/ludeeus/integration_
    - `custom_components/integration_blueprint/` → `custom_components/<your_domain>/`
    - `DOMAIN = "integration_blueprint"` in `const.py`; `domain` in `manifest.json`; `name` in `hacs.json`
    - `name`, `documentation`, `issue_tracker`, `codeowners` in `manifest.json`
+   - Add `country` to `hacs.json` **only** if your device or service is country-specific, e.g. `"country": ["BR"]` (ISO 3166-1 alpha-2, string or list). HACS hides the repository from users who filter by another country, so leave it out for anything usable worldwide — the blueprint ships without it on purpose. Once set, write the README, docstrings and comments in that country's language, keep the code in English and leave native domain terms untranslated (see `CODE_STYLE.md`, "Language").
    - Rename classes: `IntegrationBlueprint*` → `<YourDomain>*`
    - Run `grep -rn integration_blueprint .` to catch leftover imports (especially in `tests/`)
 3. Replace the sample API in `api.py` with your real client and adjust `coordinator.py`, `config_flow.py`, `sensor.py` to match.

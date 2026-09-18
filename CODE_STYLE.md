@@ -12,7 +12,24 @@ run `uv run ruff format --check .`, `uv run ruff check .` and
 - Code is written in **English**: file names, class names, function names,
   variable names, dictionary keys, identifier strings.
 - The conversation language with the user can be Portuguese or anything else;
-  what is committed to disk stays English.
+  it never decides what is committed to disk.
+- **A country-specific repository documents itself in that country's
+  language.** When `hacs.json` declares `country`, the README, the other
+  Markdown docs, docstrings and code comments are written in the language of
+  that country (`["BR"]` → Brazilian Portuguese). Without `country` — or when
+  the listed countries do not share a language — documentation stays English.
+- **Code stays English regardless of `country`**: the language of the prose
+  never leaks into identifiers, file names, keys or log messages. Commit
+  messages, PR titles and changelogs also stay English — the release tooling
+  builds the changelog from them.
+- **Native domain terms keep their original language, in code and in prose.**
+  They are the ubiquitous language shared with the users and with the upstream
+  service, and a translation only forces everyone to map it back: write
+  `bandeira_tarifaria`, `unidade_consumidora`, `cep`, `Linha`, not
+  `tariff_flag`, `consumer_unit`, `zip_code`, `Line`. Everything around the
+  term is English (`fetch_bandeira_tarifaria`, `UnidadeConsumidoraSensor`).
+  Identifiers drop diacritics (`estacao`); prose and translated strings keep
+  them (`estação`).
 - User-facing strings live in `custom_components/integration_blueprint/translations/{en,pt-BR}.json`
   only — never hardcoded in Python.
 
@@ -254,6 +271,13 @@ Both gates must stay green:
   when it is a gateway exposing several, and adjust per fork.
 - `hacs.json` at the repo root pins the minimum HA core via the
   `homeassistant` key. This is the third HA pin (see `CLAUDE.md`).
+- `hacs.json` takes an optional `country` key — one ISO 3166-1 alpha-2 code or
+  a list of them (`"country": ["BR"]`). A HACS user who sets a country in the
+  HACS options stops seeing repositories tagged for other countries, while
+  untagged repositories stay visible to everyone. The blueprint omits the key
+  because the sample integration is not tied to a country; a fork sets it only
+  when the device or service exists in specific countries, and prefers the list
+  form so adding a country is a one-line diff.
 - Brand assets live under `custom_components/<domain>/brand/` — `icon.png`,
   `logo.png` (+ `@2x` variants) and `icon.svg`. The blueprint ships **obvious
   `TODO` placeholders** (a slate box stamped `TODO / replace me`), not sample

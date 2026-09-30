@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.1.12](https://github.com/roquerodrigo/ha-integration-blueprint/compare/v0.1.11...v0.1.12) (2026-09-30)
+
+
+### Dependencies
+
+* **deps:** bump anyio from 4.13.0 to 4.14.2 ([faa0df4](https://github.com/roquerodrigo/ha-integration-blueprint/commit/faa0df46f5e17bd85618c07401b2378ff6f8ff51))
+
+
+### Development Dependencies
+
+* **deps-dev:** bump ruff in the python-deps group ([2736037](https://github.com/roquerodrigo/ha-integration-blueprint/commit/27360378a27572ff67ea7e03fac47e1c6e5133a4))
+* **deps-dev:** bump ruff in the python-deps group ([c64a732](https://github.com/roquerodrigo/ha-integration-blueprint/commit/c64a73217ddcfdbff9bdb10f25ea29a915246529))
+
+
+### Build System
+
+* **release:** bump uv.lock through release-please ([21fd226](https://github.com/roquerodrigo/ha-integration-blueprint/commit/21fd22600574f6bfa7fee0dc7410f2ab568d44e6))
+
 ## [0.1.11](https://github.com/roquerodrigo/ha-integration-blueprint/compare/v0.1.10...v0.1.11) (2026-09-18)
 
 

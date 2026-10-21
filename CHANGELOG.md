@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.12](https://github.com/roquerodrigo/ha-integration-blueprint/compare/v0.1.11...v0.1.12) (2026-10-21)
+
+
+### Miscellaneous Chores
+
+* **release:** keep only user-facing changes in the changelog ([0d1fdae](https://github.com/roquerodrigo/ha-integration-blueprint/commit/0d1fdaec2047cb95a34cebcc225296bc4c36c650))
+
 ## [0.1.11](https://github.com/roquerodrigo/ha-integration-blueprint/compare/v0.1.10...v0.1.11) (2026-09-18)
 
 

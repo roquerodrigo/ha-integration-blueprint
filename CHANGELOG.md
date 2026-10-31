@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.1.12](https://github.com/roquerodrigo/ha-integration-blueprint/compare/v0.1.11...v0.1.12) (2026-10-31)
+
+Internal maintenance only, with no changes for those who use the project.
+
 ## [0.1.11](https://github.com/roquerodrigo/ha-integration-blueprint/compare/v0.1.10...v0.1.11) (2026-09-18)
 
 

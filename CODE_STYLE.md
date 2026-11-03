@@ -265,9 +265,10 @@ with a one-line comment explaining the deliberate narrowing — see
 
 ## HACS publishing requirements
 
-[HACS](https://www.hacs.xyz/docs/publish/integration/) validates the repository
-shape on every push via `hacs/action@main` (and HA itself runs `hassfest`).
-Both gates must stay green:
+[Home Assistant Autopilot](https://github.com/marketplace/actions/home-assistant-autopilot)
+validates the repository shape on every push: `hassfest`, the catalog checks of
+the [Home Assistant Marketplace](https://contributors.home-assistant.io/marketplace/),
+`hacs.json` and the versions it declares. Every check must stay green:
 
 - **One integration per repository**, located in `custom_components/<domain>/`.
 - `manifest.json` must declare `domain`, `name`, `version`, `documentation`,
@@ -332,8 +333,8 @@ Every repository opens `README.md` with the same header, in this exact order:
 
 **A private repository gets no HACS link.** `my.home-assistant.io` resolves the
 target through the public GitHub API, so on a private repository the button
-lands on something HACS cannot install. It is the same reason those repositories
-call the validate workflow with `hacs: false`. Ship the title, the badges and
+lands on something HACS cannot install. It is the same reason the catalog checks
+skip those repositories. Ship the title, the badges and
 the separator, and add the link when — and only when — the repository is made
 public.
 

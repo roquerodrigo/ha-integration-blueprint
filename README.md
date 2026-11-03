@@ -20,7 +20,7 @@ Based on [ludeeus/integration_blueprint](https://github.com/ludeeus/integration_
 - **Options flow** with a configurable `scan_interval` plumbed through to the coordinator.
 - **Diagnostics platform** with credential redaction (`diagnostics.py`).
 - **Repairs platform** (`repairs.py`) wired into HA's Issue Registry, with sample issue + `ConfirmRepairFlow`.
-- **CI**: ruff lint + format, mypy type-check, `hassfest`, HACS validation, CodeQL security scan.
+- **CI**: ruff lint + format, mypy type-check, Home Assistant Marketplace validation (`hassfest` and the catalog checks), CodeQL security scan.
 - **Pre-commit hooks** (`.pre-commit-config.yaml`) mirroring the lint gates plus file hygiene checks.
 - **Coverage gate** at 90 % enforced by `pyproject.toml` (`--cov-fail-under`).
 - **Scripts** (`scripts/setup`, `scripts/develop`) built on `uv` — create the `.venv` and start HA in debug with the integration loaded.
@@ -115,11 +115,11 @@ This wires ruff + basic file hygiene checks (`.pre-commit-config.yaml`) into eve
 
 ## CI
 
-The workflows call the reusable workflows in [`roquerodrigo/workflows`](https://github.com/roquerodrigo/workflows), and the release uses the [Release Autopilot](https://github.com/marketplace/actions/release-autopilot) action:
+The workflows call the reusable workflows in [`roquerodrigo/workflows`](https://github.com/roquerodrigo/workflows), the validation and the release asset come from [Home Assistant Autopilot](https://github.com/marketplace/actions/home-assistant-autopilot), and the release uses the [Release Autopilot](https://github.com/marketplace/actions/release-autopilot) action:
 
-- **`ci.yml`** — ruff (check + format) + mypy, pytest with the coverage gate, and `hassfest` + HACS validation; push/PR to `main`
+- **`ci.yml`** — ruff (check + format) + mypy, pytest with the coverage gate, and Home Assistant Marketplace validation; push/PR to `main`
 - **`codeql.yml`** — GitHub CodeQL security scan; push/PR to `main` and a weekly cron
-- **`release.yml`** — Release Autopilot, gated on a green CI run on `main`
+- **`release.yml`** — Release Autopilot, gated on a green CI run on `main`, then the integration zip attached to the release
 - **`auto-assign.yml`** — assigns new issues/PRs to the code owner
 
 ## Companion SDK

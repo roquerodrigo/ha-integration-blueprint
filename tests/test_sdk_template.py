@@ -89,6 +89,13 @@ def test_template_carries_no_release_please_configuration(leftover):
     assert not (SDK_TEMPLATE / leftover).exists()
 
 
+def test_template_starts_releases_below_one():
+    configuration = yaml.safe_load(
+        (SDK_TEMPLATE / ".release-autopilot.yml").read_text()
+    )
+    assert configuration == {"initial_version": "0.1.0"}
+
+
 def test_template_test_suite_is_network_free_by_default():
     conftest = (SDK_TEMPLATE / "tests" / "conftest.py").read_text()
     assert "--run-live" in conftest

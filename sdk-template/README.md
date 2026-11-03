@@ -58,9 +58,8 @@ delete it.
   and into `uv.lock`, and writes the release notes and `CHANGELOG.md`. Merging
   that pull request tags `vX.Y.Z` and creates the GitHub release, and the
   shared `publish-pypi` reusable then publishes the tag to PyPI. The version
-  files are detected on their own, so the SDK needs no release configuration;
-  the first release is `1.0.0` unless a `.release-autopilot.yml` sets
-  `initial_version`. Running the workflow by hand with a `tag` republishes an
+  files are detected on their own; `.release-autopilot.yml` only sets
+  `initial_version`, so the first release is `0.1.0` rather than `1.0.0`. Running the workflow by hand with a `tag` republishes an
   existing tag to PyPI.
 
 ## Releasing a fix that has to reach Home Assistant

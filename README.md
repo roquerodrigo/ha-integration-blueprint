@@ -115,11 +115,11 @@ This wires ruff + basic file hygiene checks (`.pre-commit-config.yaml`) into eve
 
 ## CI
 
-All workflows call the reusable workflows in [`roquerodrigo/workflows`](https://github.com/roquerodrigo/workflows):
+The workflows call the reusable workflows in [`roquerodrigo/workflows`](https://github.com/roquerodrigo/workflows), and the release uses the [Release Autopilot](https://github.com/marketplace/actions/release-autopilot) action:
 
 - **`ci.yml`** — ruff (check + format) + mypy, pytest with the coverage gate, and `hassfest` + HACS validation; push/PR to `main`
 - **`codeql.yml`** — GitHub CodeQL security scan; push/PR to `main` and a weekly cron
-- **`release.yml`** — release-please, gated on a green CI run on `main`
+- **`release.yml`** — Release Autopilot, gated on a green CI run on `main`
 - **`auto-assign.yml`** — assigns new issues/PRs to the code owner
 
 ## Companion SDK

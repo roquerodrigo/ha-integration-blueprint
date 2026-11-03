@@ -4,9 +4,13 @@ import tomllib
 from pathlib import Path
 
 import pytest
+import yaml
 
 SDK_TEMPLATE = Path(__file__).parent.parent / "sdk-template"
 PYPROJECT = tomllib.loads((SDK_TEMPLATE / "pyproject.toml").read_text())
+RELEASE_WORKFLOW = yaml.safe_load(
+    (SDK_TEMPLATE / ".github" / "workflows" / "release.yml").read_text()
+)
 
 
 def test_template_ships_a_license():
@@ -45,11 +49,44 @@ def test_runtime_dependencies_are_neither_pinned_nor_capped(requirement):
     assert "<" not in requirement
 
 
-def test_template_release_publishes_to_pypi():
-    release = (SDK_TEMPLATE / ".github" / "workflows" / "release.yml").read_text()
-    assert "publish-pypi.yml@main" in release
-    assert "release-please.yml@main" in release
-    assert "sync-uv-lock.yml@main" in release
+def test_template_release_is_cut_by_release_autopilot():
+    release_job = RELEASE_WORKFLOW["jobs"]["release"]
+    release_step = next(
+        step for step in release_job["steps"] if step.get("id") == "release"
+    )
+    assert release_step["uses"] == "roquerodrigo/release-autopilot@latest"
+    assert release_step["with"] == {
+        "token": "${{ secrets.RELEASE_TOKEN }}",
+        "anthropic-api-key": "${{ secrets.ANTHROPIC_API_KEY }}",
+    }
+    assert release_job["outputs"] == {
+        "released": "${{ steps.release.outputs.released }}",
+        "tag": "${{ steps.release.outputs.tag }}",
+    }
+    assert release_job["permissions"] == {
+        "contents": "write",
+        "pull-requests": "write",
+    }
+    assert RELEASE_WORKFLOW["concurrency"] == {
+        "group": "release",
+        "cancel-in-progress": False,
+    }
+
+
+def test_template_release_publishes_the_released_tag_to_pypi():
+    publish_job = RELEASE_WORKFLOW["jobs"]["publish"]
+    assert publish_job["needs"] == "release"
+    assert publish_job["uses"].endswith("/publish-pypi.yml@main")
+    assert "needs.release.outputs.released == 'true'" in publish_job["if"]
+    assert "needs.release.outputs.tag" in publish_job["with"]["ref"]
+    assert publish_job["with"]["package"] == PYPROJECT["project"]["name"]
+
+
+@pytest.mark.parametrize(
+    "leftover", ["release-please-config.json", ".release-please-manifest.json"]
+)
+def test_template_carries_no_release_please_configuration(leftover):
+    assert not (SDK_TEMPLATE / leftover).exists()
 
 
 def test_template_test_suite_is_network_free_by_default():

@@ -14,16 +14,18 @@ tested, versioned and released without an HA test harness.
 
 1. Create the SDK repository and copy the **contents** of this directory into
    its root (including the dotfiles: `.github/`, `.gitignore`,
-   `.pre-commit-config.yaml`, `.release-please-manifest.json`).
+   `.pre-commit-config.yaml`).
 2. Rename the placeholders:
    - directory `src/sdk_template/` → `src/<your_package>/`
    - `name` in `pyproject.toml`, `[tool.hatch.build.targets.wheel] packages`,
-     the `--cov` target, `package-name` in `release-please-config.json` and the
-     `package` input of the publish job in `.github/workflows/release.yml`
+     the `--cov` target and the `package` input of the publish job in
+     `.github/workflows/release.yml`
    - class prefix `SdkTemplate*` → `<YourPackage>*`
    - `grep -rn sdk_template .` and `grep -rn sdk-template .` catch the rest
 3. Replace `client.py` with the real client and its tests.
-4. Add the repository secrets the release flow needs: `RELEASE_PLEASE_PAT` and
+4. Add the repository secrets the release flow needs: `RELEASE_TOKEN` (a token
+   with contents and pull-requests write access, so the release pull request it
+   opens runs CI), `ANTHROPIC_API_KEY` (for the release notes) and
    `PYPI_API_TOKEN`.
 
 In a fork of the integration blueprint this whole directory is dead weight —
@@ -49,16 +51,22 @@ delete it.
   `--run-live` (or `SDK_TEMPLATE_LIVE=1`), so cloning and running `pytest`
   never depends on the device being reachable — and never depends on real
   credentials, which must not be committed as fixtures either way.
-- **Release flow.** `release-please` grooms the release pull request and tags
-  it, `sync-uv-lock` refreshes the lock on the release branch so it lands
-  carrying the released version, and `publish-pypi` publishes the tag. All
-  three are the shared reusables the rest of the fleet already runs, gated on a
-  green CI run.
+- **Release flow.** After a green CI run on `main`,
+  [Release Autopilot](https://github.com/marketplace/actions/release-autopilot)
+  keeps a release pull request up to date: it picks the next version from the
+  conventional commits, writes it into `project.version` in `pyproject.toml`
+  and into `uv.lock`, and writes the release notes and `CHANGELOG.md`. Merging
+  that pull request tags `vX.Y.Z` and creates the GitHub release, and the
+  shared `publish-pypi` reusable then publishes the tag to PyPI. The version
+  files are detected on their own, so the SDK needs no release configuration;
+  the first release is `1.0.0` unless a `.release-autopilot.yml` sets
+  `initial_version`. Running the workflow by hand with a `tag` republishes an
+  existing tag to PyPI.
 
 ## Releasing a fix that has to reach Home Assistant
 
-1. Pull request on the SDK (fix plus tests), merged; release-please cuts the
-   release and it publishes to PyPI.
+1. Pull request on the SDK (fix plus tests), merged; merging the release pull
+   request kept by Release Autopilot tags the release and it publishes to PyPI.
 2. Bump pull request on the integration: the `==` pin in `manifest.json` and
    the matching pin in the integration's dev dependency group, plus whatever
    code the new version needs.

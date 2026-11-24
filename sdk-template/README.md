@@ -28,7 +28,7 @@ tested, versioned and released without an HA test harness.
    opens runs CI), `ANTHROPIC_API_KEY` (for the release notes) and
    `PYPI_API_TOKEN`.
 
-In a fork of the integration blueprint this whole directory is dead weight —
+In a fork of the integration blueprint this whole directory is dead weight:
 delete it.
 
 ## What it settles
@@ -39,7 +39,7 @@ delete it.
   `Any`. It is force-included in the wheel because hatchling does not pick up
   non-Python files on its own.
 - **Runtime dependencies are never pinned and never capped.** Home Assistant
-  pins its own transitive dependencies exactly, so an SDK that pins — or caps —
+  pins its own transitive dependencies exactly, so an SDK that pins (or caps)
   a library HA also ships will eventually contradict HA's pin and the
   integration fails to install. Use a `>=` floor only. Exact pins belong in the
   dependency groups and the lock file, which never reach the consumer. The
@@ -49,7 +49,7 @@ delete it.
   boundary to relax for, unlike the integration.
 - **Network-free tests by default.** The live-hardware suite is opt-in through
   `--run-live` (or `SDK_TEMPLATE_LIVE=1`), so cloning and running `pytest`
-  never depends on the device being reachable — and never depends on real
+  never depends on the device being reachable, and never depends on real
   credentials, which must not be committed as fixtures either way.
 - **Release flow.** After a green CI run on `main`,
   [Release Autopilot](https://github.com/marketplace/actions/release-autopilot)
@@ -73,5 +73,5 @@ delete it.
 
 Before merging the SDK release, validate the change against a locally built
 wheel (`uv build`, then install the artefact into the environment that runs the
-integration) — the first real execution of a change should never be the
+integration). The first real execution of a change should never be the
 published version.

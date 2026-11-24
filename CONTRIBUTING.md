@@ -1,55 +1,73 @@
-# Contribution guidelines
+# Contributing
 
-Contributing to this project should be as easy and transparent as possible, whether it's:
+Bug reports, ideas and pull requests are welcome. A change here reaches new
+integrations made from the template. Integrations that already exist do not
+pick it up.
 
-- Reporting a bug
-- Discussing the current state of the code
-- Submitting a fix
-- Proposing new features
+## Reporting a bug
 
-## Github is used for everything
+Open an [issue](https://github.com/roquerodrigo/ha-integration-blueprint/issues/new/choose)
+with:
 
-Github is used to host code, to track issues and feature requests, as well as accept pull requests.
+- the Home Assistant version and the template version;
+- what you did, what you expected and what happened;
+- the relevant log lines and, if the sample integration was running, its
+  diagnostics (the user name and password are redacted).
 
-Pull requests are the best way to propose changes to the codebase.
+## Development setup
 
-1. Fork the repo and create your branch from `main`.
-2. If you've changed something, update the documentation.
-3. Make sure your code lints (run `uv run ruff format --check .`, `uv run ruff check .` and `uv run mypy custom_components/integration_blueprint`).
-4. Test your contribution.
-5. Issue that pull request!
+The project uses [uv](https://docs.astral.sh/uv/), which manages `.venv` on
+its own. Prefix ad hoc commands with `uv run`.
 
-## Any contributions you make will be under the MIT Software License
+```bash
+scripts/setup      # install the dependencies into .venv
+scripts/develop    # run Home Assistant at http://localhost:8123 with this integration loaded
+```
 
-In short, when you submit code changes, your submissions are understood to be under the same [MIT License](http://choosealicense.com/licenses/mit/) that covers the project. Feel free to contact the maintainers if that's a concern.
+`scripts/develop` uses the configuration in [`config/`](config/), with debug
+logging for the integration. It loads the integration straight from
+`custom_components/`, so there is nothing to link or copy. To start again with
+new entity and device ids, delete `config/.storage/core.entity_registry` and
+`config/.storage/core.device_registry`.
 
-## Report bugs using Github's [issues](../../issues)
+## Checks
 
-GitHub issues are used to track public bugs.
-Report a bug by [opening a new issue](../../issues/new/choose); it's that easy!
+Run these before opening a pull request. CI runs the same ones, and
+`scripts/lint` runs all four in this order.
 
-## Write bug reports with detail, background, and sample code
+```bash
+uv run ruff format --check .                          # formatting
+uv run ruff check .                                   # lint
+uv run mypy custom_components/integration_blueprint   # type check
+uv run pytest                                         # tests, coverage must stay at 90 % or more
+```
 
-**Great Bug Reports** tend to have:
+`pre-commit install` adds a hook that formats, lints and type checks every
+commit with the same tool versions, along with basic file checks.
 
-- A quick summary and/or background
-- Steps to reproduce
-  - Be specific!
-  - Give sample code if you can.
-- What you expected would happen
-- What actually happens
-- Notes (possibly including why you think this might be happening, or stuff you tried that didn't work)
+Read [CODE_STYLE.md](CODE_STYLE.md) before adding or restructuring code.
 
-## Use a Consistent Coding Style
+## Updating Home Assistant
 
-The project uses [ruff](https://docs.astral.sh/ruff/) (config in `pyproject.toml`). Run `uv run ruff format --check .`, `uv run ruff check .` and `uv run mypy custom_components/integration_blueprint` before sending a PR.
+Home Assistant is pinned three times, and the three move together:
+`homeassistant` and `pytest-homeassistant-custom-component` in
+`pyproject.toml`, and `homeassistant` in `hacs.json`. Pick the harness release
+that pins the same Home Assistant version. Dependabot leaves both packages
+alone for this reason.
 
-## Test your code modification
+## Pull requests
 
-This template is based on [integration_blueprint template](https://github.com/ludeeus/integration_blueprint).
-
-Run `scripts/setup` once to create the `uv`-managed virtual environment, then `scripts/develop` to start a stand-alone Home Assistant instance in debug mode with the integration loaded and the included [`configuration.yaml`](./config/configuration.yaml) file.
+1. Fork the repository and branch from `main`.
+2. Write commit messages as [Conventional Commits](https://www.conventionalcommits.org/).
+   Releases and their notes are generated from them. Mark breaking changes
+   with `!` or a `BREAKING CHANGE:` footer.
+3. Update `translations/en.json` and `translations/pt-BR.json` together when
+   you change user-facing strings.
+4. Update the README when what the template provides or how to start from it
+   changes, and [docs/readme-standard.md](docs/readme-standard.md) when the
+   README rules change.
+5. Fill in the pull request template.
 
 ## License
 
-By contributing, you agree that your contributions will be licensed under its MIT License.
+Contributions are released under the project's [MIT License](LICENSE).

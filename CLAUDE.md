@@ -6,7 +6,7 @@ Guidance for Claude Code (claude.ai/code) agents working in this repository.
 
 Before creating, renaming or restructuring any file/class/function, **read [`CODE_STYLE.md`](./CODE_STYLE.md)**. It is the single source of truth for conventions: language, file organisation, naming, typing, properties vs `__init__`, imports, docstrings, comments, coordinator pattern, repairs/diagnostics layout, translations, lint workflow.
 
-For user-facing topics (what's included, how to fork, rename steps, layout diagram, useful commands, CI list), see [`README.md`](./README.md).
+For what the template provides, how to start a new integration from it and the layout table, see [`README.md`](./README.md); development commands are in [`CONTRIBUTING.md`](./CONTRIBUTING.md), and the rules for a new integration's README in [`docs/readme-standard.md`](./docs/readme-standard.md).
 
 This file deliberately avoids restating those rules — it only adds:
 
@@ -16,7 +16,7 @@ This file deliberately avoids restating those rules — it only adds:
 
 ## Template relationship
 
-This repo is the scaffold other `ha-*` integration repos are created from via GitHub's "Use this template" button (see `README.md` → How to use). That copy is **one-time and one-directional**: once a repo is generated, it has its own `CLAUDE.md`/`CODE_STYLE.md`/CI and diverges immediately — there is no sync mechanism pulling blueprint changes into existing forks. A fix or convention change made here (e.g. a new `CODE_STYLE.md` rule, a CI job bump) only reaches already-forked repos if someone manually ports it over; treat this repo and its forks as independent once generated, not as a shared-source relationship.
+This repo is the scaffold other `ha-*` integration repos are created from via GitHub's "Use this template" button (see `README.md` → Starting a new integration). That copy is **one-time and one-directional**: once a repo is generated, it has its own `CLAUDE.md`/`CODE_STYLE.md`/CI and diverges immediately — there is no sync mechanism pulling blueprint changes into existing forks. A fix or convention change made here (e.g. a new `CODE_STYLE.md` rule, a CI job bump) only reaches already-forked repos if someone manually ports it over; treat this repo and its forks as independent once generated, not as a shared-source relationship.
 
 ## Verification workflow
 

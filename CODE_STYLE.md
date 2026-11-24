@@ -68,7 +68,8 @@ run `uv run ruff format --check .`, `uv run ruff check .` and
 - **Helper functions** may live in the same file as the single class that uses
   them (e.g. `_verify_response_or_raise` in `api.py`).
 - **`__init__.py` of the integration package** wires `async_setup_entry`,
-  `async_unload_entry`, `async_reload_entry` and nothing else.
+  `async_unload_entry`, `async_reload_entry`,
+  `async_remove_config_entry_device` and nothing else.
 
 ## Entities: one class per entity
 
@@ -206,8 +207,9 @@ with a one-line comment explaining the deliberate narrowing — see
 - Format: `"Failed to <verb> <object>: <cause>"` where `<cause>` is the
   exception or a short reason. Keep them short and grep-able.
 - Pre-validate inputs before the network call so user-facing errors point at
-  the bad input, not a downstream traceback (`config_flow._validate` rejects
-  malformed credentials before contacting the API).
+  the bad input, not a downstream traceback. `config_flow._validate` is the
+  place for those checks; the blueprint's sample credentials have none, so it
+  only maps the API client's exceptions to form errors.
 - Custom exceptions get the same hierarchy:
   `IntegrationBlueprintApiClientError` (base) → `…CommunicationError` (timeout,
   connection, DNS) and `…AuthenticationError` (401/403). Wrap raw upstream
@@ -233,7 +235,9 @@ with a one-line comment explaining the deliberate narrowing — see
   the entities currently subscribed — disabled entities shouldn't drive
   network calls.
 - Error mapping inside `_async_update_data`:
-  - Communication errors → `raise UpdateFailed("Failed to …: %s" % err)`. Pass
+  - Communication errors → serve the last known data while the outage is
+    shorter than `FAILURE_GRACE_PERIOD` (five minutes, `timedelta(0)` opts
+    out), then `raise UpdateFailed("Failed to …: %s" % err)`. Pass
     `retry_after=<seconds>` when the upstream signals an explicit backoff (e.g.
     HTTP 429 `Retry-After`).
   - Authentication errors → `raise ConfigEntryAuthFailed(...)` — HA cancels
@@ -293,50 +297,22 @@ the [Home Assistant Marketplace](https://contributors.home-assistant.io/marketpl
   `logo.png` (+ `@2x` variants) and `icon.svg`. The blueprint ships **obvious
   `TODO` placeholders** (a slate box stamped `TODO / replace me`), not sample
   artwork: they keep the HACS `brands` check green while making it impossible to
-  mistake them for the real brand. Replace every file per integration and
-  register the assets in
-  [home-assistant/brands](https://github.com/home-assistant/brands).
-- A `README.md` at the repo root is required; HACS surfaces it as the
-  integration description. Its header follows the layout below.
+  mistake them for the real brand. Replace every file per integration. Home
+  Assistant 2026.3 and later serves this directory directly, so there is
+  nothing to submit to `home-assistant/brands`.
+- A `README.md` at the repo root is required; HACS and the Marketplace show it
+  on the integration's page. Write it to the
+  [README standard](docs/readme-standard.md).
 
 [Release Autopilot](https://github.com/marketplace/actions/release-autopilot) tags a release each time the
 release pull request merges into `main`; HACS surfaces the five most recent
 GitHub releases to users, so keep the changelog grep-able.
 
-## README header
+## README
 
-Every repository opens `README.md` with the same header, in this exact order:
-**title → badges → HACS link → `---` separator → the rest of the document.**
-
-```markdown
-# <Title>
-
-[![CI](https://github.com/roquerodrigo/<repo>/actions/workflows/ci.yml/badge.svg)](https://github.com/roquerodrigo/<repo>/actions/workflows/ci.yml)
-[![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://github.com/hacs/integration)
-
-[![Open your Home Assistant instance and open the repository inside HACS.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=roquerodrigo&repository=<repo>&category=integration)
-
----
-```
-
-- `owner=` is always `roquerodrigo`; `repository=` is the repository name.
-- `category=integration` for an integration; `category=plugin` for a Lovelace
-  card repository.
-- The HACS link is a paragraph of its own, separated from the badge block by a
-  blank line. The badge row and the "Open your Home Assistant instance" button
-  are different things and must not run together.
-- Preserve the badges a repository already carries and invent no new ones; all
-  of them belong **before** the HACS link.
-- The `---` immediately after the HACS link is the header separator. A README
-  that already uses `---` further down keeps those as section breaks — do not
-  add a second separator to the header.
-
-**A private repository gets no HACS link.** `my.home-assistant.io` resolves the
-target through the public GitHub API, so on a private repository the button
-lands on something HACS cannot install. It is the same reason the catalog checks
-skip those repositories. Ship the title, the badges and
-the separator, and add the link when — and only when — the repository is made
-public.
+The README follows [docs/readme-standard.md](docs/readme-standard.md): the
+section order, the header with the Marketplace exclusion markers, no
+config-flow button, the Support text and the writing rules.
 
 ## Quality scale
 

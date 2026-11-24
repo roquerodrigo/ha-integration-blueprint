@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.1.12](https://github.com/roquerodrigo/ha-integration-blueprint/compare/v0.1.11...v0.1.12) (2026-11-24)
+
+### New features
+
+- Added a README standard for integrations made from the template, and rewrote the README and CONTRIBUTING guides around starting a new integration, with corrected statements on brand images and coordinator behavior. ([#110](https://github.com/roquerodrigo/ha-integration-blueprint/pull/110))
+
+### Bug fixes
+
+- The SDK template's release workflow was broken because it called a workflow that no longer exists. It now releases through Release Autopilot, and new SDKs start at version 0.1.0. ([#100](https://github.com/roquerodrigo/ha-integration-blueprint/pull/100))
+
 ## [0.1.11](https://github.com/roquerodrigo/ha-integration-blueprint/compare/v0.1.10...v0.1.11) (2026-09-18)
 
 
